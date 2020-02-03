@@ -30,6 +30,10 @@ class LocalesController extends Controller
         $local->Horario;
         //$local->Caracteristicasss;
         $local->Caracteristicas;
+        //print_r($horario);
+        foreach ($local->Caracteristicas as $value) {
+            $value->GrupoCaracteristicas;
+        }
         return $local;
     }
 
