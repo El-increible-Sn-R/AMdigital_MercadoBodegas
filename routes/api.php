@@ -34,5 +34,7 @@ Route::group(['middleware'=>'cors'],function(){
     
     //ruta para modificar/actualisar una reserva:
     Route::post('/reservas/modificarReserva','ReservasController@ActualizarUnaReserva');
+
+    Route::post('/reservas/insertarReserva','ReservasController@store');
     
 });
