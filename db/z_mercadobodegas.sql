@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 05-02-2020 a las 16:34:23
+-- Tiempo de generación: 05-02-2020 a las 20:23:48
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -34,47 +34,47 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=183 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(170, '2020_01_10_005332_create_usuarios_table', 1),
-(171, '2020_01_10_005416_create_empresas_table', 1),
-(172, '2020_01_10_005448_create_locales_table', 1),
-(173, '2020_01_10_005530_create_galerias_table', 1),
-(174, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
-(175, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
-(176, '2020_01_10_005854_create_localcaracteristicas_table', 1),
-(177, '2020_01_10_005938_create_unidades_table', 1),
-(178, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
-(179, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
-(180, '2020_01_10_010313_create_reservas_table', 1),
-(181, '2020_01_10_010400_create_visitas_table', 1),
-(182, '2020_01_10_010417_create_horario_table', 1);
+(1, '2020_01_10_005332_create_usuarios_table', 1),
+(2, '2020_01_10_005416_create_empresas_table', 1),
+(3, '2020_01_10_005448_create_locales_table', 1),
+(4, '2020_01_10_005530_create_galerias_table', 1),
+(5, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
+(6, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
+(7, '2020_01_10_005854_create_localcaracteristicas_table', 1),
+(8, '2020_01_10_005938_create_unidades_table', 1),
+(9, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
+(10, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
+(11, '2020_01_10_010313_create_reservas_table', 1),
+(12, '2020_01_10_010400_create_visitas_table', 1),
+(13, '2020_01_10_010417_create_horario_table', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `t_caracteriticaslocal`
+-- Estructura de tabla para la tabla `t_caracteriticas_de_locales`
 --
 
-DROP TABLE IF EXISTS `t_caracteriticaslocal`;
-CREATE TABLE IF NOT EXISTS `t_caracteriticaslocal` (
+DROP TABLE IF EXISTS `t_caracteriticas_de_locales`;
+CREATE TABLE IF NOT EXISTS `t_caracteriticas_de_locales` (
   `caracteristicasLocal_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `caracteristicasLocal_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `grupo_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`caracteristicasLocal_id`),
-  KEY `t_caracteriticaslocal_grupo_id_foreign` (`grupo_id`)
+  KEY `t_caracteriticas_de_locales_grupo_id_foreign` (`grupo_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `t_caracteriticaslocal`
+-- Volcado de datos para la tabla `t_caracteriticas_de_locales`
 --
 
-INSERT INTO `t_caracteriticaslocal` (`caracteristicasLocal_id`, `caracteristicasLocal_nombre`, `grupo_id`) VALUES
+INSERT INTO `t_caracteriticas_de_locales` (`caracteristicasLocal_id`, `caracteristicasLocal_nombre`, `grupo_id`) VALUES
 (1, 'Acepta Tarjeta De Crédito', 1),
 (2, 'Acepta Cheques', 1),
 (3, 'Acepta Efectivo', 1),
@@ -101,11 +101,11 @@ INSERT INTO `t_caracteriticaslocal` (`caracteristicasLocal_id`, `caracteristicas
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `t_caracteriticasunidad`
+-- Estructura de tabla para la tabla `t_caracteriticas_de_unidades`
 --
 
-DROP TABLE IF EXISTS `t_caracteriticasunidad`;
-CREATE TABLE IF NOT EXISTS `t_caracteriticasunidad` (
+DROP TABLE IF EXISTS `t_caracteriticas_de_unidades`;
+CREATE TABLE IF NOT EXISTS `t_caracteriticas_de_unidades` (
   `caracteristicasUnidad_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `caracteristicasUnidad_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`caracteristicasUnidad_id`)
@@ -155,21 +155,21 @@ CREATE TABLE IF NOT EXISTS `t_galeria` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `t_grupocaracteristicas`
+-- Estructura de tabla para la tabla `t_grupo_de_caracteristicas`
 --
 
-DROP TABLE IF EXISTS `t_grupocaracteristicas`;
-CREATE TABLE IF NOT EXISTS `t_grupocaracteristicas` (
+DROP TABLE IF EXISTS `t_grupo_de_caracteristicas`;
+CREATE TABLE IF NOT EXISTS `t_grupo_de_caracteristicas` (
   `grupo_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `grupo_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`grupo_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `t_grupocaracteristicas`
+-- Volcado de datos para la tabla `t_grupo_de_caracteristicas`
 --
 
-INSERT INTO `t_grupocaracteristicas` (`grupo_id`, `grupo_nombre`) VALUES
+INSERT INTO `t_grupo_de_caracteristicas` (`grupo_id`, `grupo_nombre`) VALUES
 (1, 'pagos'),
 (2, 'seguridad'),
 (3, 'acceso'),
@@ -254,24 +254,79 @@ INSERT INTO `t_horario` (`horario_id`, `horario_horaEntrada`, `horario_horaSalid
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `t_localcaracteriticas`
+-- Estructura de tabla para la tabla `t_locales`
 --
 
-DROP TABLE IF EXISTS `t_localcaracteriticas`;
-CREATE TABLE IF NOT EXISTS `t_localcaracteriticas` (
+DROP TABLE IF EXISTS `t_locales`;
+CREATE TABLE IF NOT EXISTS `t_locales` (
+  `local_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `local_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_descripcion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `empresa_id` bigint(20) UNSIGNED NOT NULL,
+  `local_telefono` bigint(20) UNSIGNED NOT NULL,
+  `local_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_pais` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_direccion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `usuario_id` bigint(20) UNSIGNED NOT NULL,
+  `local_latitud` double NOT NULL,
+  `local_longitud` double NOT NULL,
+  `local_nDiasDeReserva` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_estaBorrado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`local_id`),
+  KEY `t_locales_empresa_id_foreign` (`empresa_id`),
+  KEY `t_locales_usuario_id_foreign` (`usuario_id`)
+) ;
+
+--
+-- Volcado de datos para la tabla `t_locales`
+--
+
+INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_comuna`, `local_direccion`, `usuario_id`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
+(1, 'local de prueba uno', 'descripcion', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Argentina 126, Arequipa 04004, Perú', 1, -16.382547, -71.519298, '20', 'n'),
+(2, 'local de prueba dos', 'descripcion', 1, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', 1, -36.807547, -73.066322, '20', 'n'),
+(3, 'local de prueba tres', 'descripcion', 1, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', 1, -33.518138, -70.61986, '20', 'n'),
+(4, 'local de prueba cuatro', 'descripcion', 1, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', 1, -33.462733, -70.742522, '20', 'n'),
+(5, 'local de prueba cinco', 'descripcion', 1, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', 1, -18.470816, -70.296328, '20', 'n');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `t_pivot_caracteriticas_unidad`
+--
+
+DROP TABLE IF EXISTS `t_pivot_caracteriticas_unidad`;
+CREATE TABLE IF NOT EXISTS `t_pivot_caracteriticas_unidad` (
+  `unidadCaracteristicas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `unidad_id` bigint(20) UNSIGNED NOT NULL,
+  `caracteristicasUnidad_id` bigint(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`unidadCaracteristicas_id`),
+  KEY `t_pivot_caracteriticas_unidad_unidad_id_foreign` (`unidad_id`),
+  KEY `t_pivot_caracteriticas_unidad_caracteristicasunidad_id_foreign` (`caracteristicasUnidad_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `t_pivot_local_caracteriticas`
+--
+
+DROP TABLE IF EXISTS `t_pivot_local_caracteriticas`;
+CREATE TABLE IF NOT EXISTS `t_pivot_local_caracteriticas` (
   `localCaracteristicas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `caracteristicasLocal_id` bigint(20) UNSIGNED NOT NULL,
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`localCaracteristicas_id`),
-  KEY `t_localcaracteriticas_local_id_foreign` (`local_id`),
-  KEY `t_localcaracteriticas_caracteristicaslocal_id_foreign` (`caracteristicasLocal_id`)
+  KEY `t_pivot_local_caracteriticas_local_id_foreign` (`local_id`),
+  KEY `t_pivot_local_caracteriticas_caracteristicaslocal_id_foreign` (`caracteristicasLocal_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `t_localcaracteriticas`
+-- Volcado de datos para la tabla `t_pivot_local_caracteriticas`
 --
 
-INSERT INTO `t_localcaracteriticas` (`localCaracteristicas_id`, `caracteristicasLocal_id`, `local_id`) VALUES
+INSERT INTO `t_pivot_local_caracteriticas` (`localCaracteristicas_id`, `caracteristicasLocal_id`, `local_id`) VALUES
 (1, 1, 1),
 (2, 2, 1),
 (3, 3, 1),
@@ -326,45 +381,6 @@ INSERT INTO `t_localcaracteriticas` (`localCaracteristicas_id`, `caracteristicas
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `t_locales`
---
-
-DROP TABLE IF EXISTS `t_locales`;
-CREATE TABLE IF NOT EXISTS `t_locales` (
-  `local_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `local_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_descripcion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `empresa_id` bigint(20) UNSIGNED NOT NULL,
-  `local_telefono` bigint(20) UNSIGNED NOT NULL,
-  `local_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_pais` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_direccion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `usuario_id` bigint(20) UNSIGNED NOT NULL,
-  `local_latitud` double NOT NULL,
-  `local_longitud` double NOT NULL,
-  `local_nDiasDeReserva` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `local_estaBorrado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
-  PRIMARY KEY (`local_id`),
-  KEY `t_locales_empresa_id_foreign` (`empresa_id`),
-  KEY `t_locales_usuario_id_foreign` (`usuario_id`)
-) ;
-
---
--- Volcado de datos para la tabla `t_locales`
---
-
-INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_comuna`, `local_direccion`, `usuario_id`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
-(1, 'local de prueba uno', 'descripcion', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Argentina 126, Arequipa 04004, Perú', 1, -16.382547, -71.519298, '20', 'n'),
-(2, 'local de prueba dos', 'descripcion', 1, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', 1, -36.807547, -73.066322, '20', 'n'),
-(3, 'local de prueba tres', 'descripcion', 1, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', 1, -33.518138, -70.61986, '20', 'n'),
-(4, 'local de prueba cuatro', 'descripcion', 1, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', 1, -33.462733, -70.742522, '20', 'n'),
-(5, 'local de prueba cinco', 'descripcion', 1, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', 1, -18.470816, -70.296328, '20', 'n');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `t_reservas`
 --
 
@@ -375,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
   `reserva_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_telefono` bigint(20) NOT NULL,
-  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-05 07:58:37',
+  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-05 20:06:22',
   `reserva_fechaMudanza` date DEFAULT '2020-02-05',
   `reserva_estado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `reserva_estaBorrado` enum('s','n') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
@@ -391,27 +407,11 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
 --
 
 INSERT INTO `t_reservas` (`reserva_id`, `reserva_nombre`, `reserva_apellido`, `reserva_email`, `reserva_telefono`, `reserva_fechaRegistro`, `reserva_fechaMudanza`, `reserva_estado`, `reserva_estaBorrado`, `unidad_id`, `reserva_codigo`, `reserva_token_edition`) VALUES
-(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-05 02:58:57', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
-(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-05 07:58:37', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
-(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-05 07:58:37', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
-(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-05 07:58:37', '2020-02-05', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
-(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-05 07:58:37', '2020-02-05', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `t_unidadcaracteriticas`
---
-
-DROP TABLE IF EXISTS `t_unidadcaracteriticas`;
-CREATE TABLE IF NOT EXISTS `t_unidadcaracteriticas` (
-  `unidadCaracteristicas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `unidad_id` bigint(20) UNSIGNED NOT NULL,
-  `caracteristicasUnidad_id` bigint(20) UNSIGNED NOT NULL,
-  PRIMARY KEY (`unidadCaracteristicas_id`),
-  KEY `t_unidadcaracteriticas_unidad_id_foreign` (`unidad_id`),
-  KEY `t_unidadcaracteriticas_caracteristicasunidad_id_foreign` (`caracteristicasUnidad_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-05 15:08:40', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
+(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-05 20:06:22', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
+(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-05 20:06:22', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
+(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-05 20:06:22', '2020-02-05', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
+(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-05 20:06:22', '2020-02-05', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
 
 -- --------------------------------------------------------
 
@@ -484,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `t_visitas` (
   `visitas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `visitas_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `visitas_fecha` datetime NOT NULL DEFAULT '2020-02-05 00:00:00',
-  `visitas_hora` time NOT NULL DEFAULT '07:58:39',
+  `visitas_hora` time NOT NULL DEFAULT '20:06:23',
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`visitas_id`),
   KEY `t_visitas_local_id_foreign` (`local_id`)
@@ -495,10 +495,10 @@ CREATE TABLE IF NOT EXISTS `t_visitas` (
 --
 
 --
--- Filtros para la tabla `t_caracteriticaslocal`
+-- Filtros para la tabla `t_caracteriticas_de_locales`
 --
-ALTER TABLE `t_caracteriticaslocal`
-  ADD CONSTRAINT `t_caracteriticaslocal_grupo_id_foreign` FOREIGN KEY (`grupo_id`) REFERENCES `t_grupocaracteristicas` (`grupo_id`);
+ALTER TABLE `t_caracteriticas_de_locales`
+  ADD CONSTRAINT `t_caracteriticas_de_locales_grupo_id_foreign` FOREIGN KEY (`grupo_id`) REFERENCES `t_grupo_de_caracteristicas` (`grupo_id`);
 
 --
 -- Filtros para la tabla `t_empresas`
@@ -519,13 +519,6 @@ ALTER TABLE `t_horario`
   ADD CONSTRAINT `t_horario_local_id_foreign` FOREIGN KEY (`local_id`) REFERENCES `t_locales` (`local_id`);
 
 --
--- Filtros para la tabla `t_localcaracteriticas`
---
-ALTER TABLE `t_localcaracteriticas`
-  ADD CONSTRAINT `t_localcaracteriticas_caracteristicaslocal_id_foreign` FOREIGN KEY (`caracteristicasLocal_id`) REFERENCES `t_caracteriticaslocal` (`caracteristicasLocal_id`),
-  ADD CONSTRAINT `t_localcaracteriticas_local_id_foreign` FOREIGN KEY (`local_id`) REFERENCES `t_locales` (`local_id`);
-
---
 -- Filtros para la tabla `t_locales`
 --
 ALTER TABLE `t_locales`
@@ -533,17 +526,24 @@ ALTER TABLE `t_locales`
   ADD CONSTRAINT `t_locales_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `t_usuarios` (`usuario_id`);
 
 --
+-- Filtros para la tabla `t_pivot_caracteriticas_unidad`
+--
+ALTER TABLE `t_pivot_caracteriticas_unidad`
+  ADD CONSTRAINT `t_pivot_caracteriticas_unidad_caracteristicasunidad_id_foreign` FOREIGN KEY (`caracteristicasUnidad_id`) REFERENCES `t_caracteriticas_de_unidades` (`caracteristicasUnidad_id`),
+  ADD CONSTRAINT `t_pivot_caracteriticas_unidad_unidad_id_foreign` FOREIGN KEY (`unidad_id`) REFERENCES `t_unidades` (`unidad_id`);
+
+--
+-- Filtros para la tabla `t_pivot_local_caracteriticas`
+--
+ALTER TABLE `t_pivot_local_caracteriticas`
+  ADD CONSTRAINT `t_pivot_local_caracteriticas_caracteristicaslocal_id_foreign` FOREIGN KEY (`caracteristicasLocal_id`) REFERENCES `t_caracteriticas_de_locales` (`caracteristicasLocal_id`),
+  ADD CONSTRAINT `t_pivot_local_caracteriticas_local_id_foreign` FOREIGN KEY (`local_id`) REFERENCES `t_locales` (`local_id`);
+
+--
 -- Filtros para la tabla `t_reservas`
 --
 ALTER TABLE `t_reservas`
   ADD CONSTRAINT `t_reservas_unidad_id_foreign` FOREIGN KEY (`unidad_id`) REFERENCES `t_unidades` (`unidad_id`);
-
---
--- Filtros para la tabla `t_unidadcaracteriticas`
---
-ALTER TABLE `t_unidadcaracteriticas`
-  ADD CONSTRAINT `t_unidadcaracteriticas_caracteristicasunidad_id_foreign` FOREIGN KEY (`caracteristicasUnidad_id`) REFERENCES `t_caracteriticasunidad` (`caracteristicasUnidad_id`),
-  ADD CONSTRAINT `t_unidadcaracteriticas_unidad_id_foreign` FOREIGN KEY (`unidad_id`) REFERENCES `t_unidades` (`unidad_id`);
 
 --
 -- Filtros para la tabla `t_unidades`
