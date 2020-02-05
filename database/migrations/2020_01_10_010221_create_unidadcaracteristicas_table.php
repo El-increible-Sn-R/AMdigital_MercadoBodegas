@@ -8,7 +8,7 @@ class CreateUnidadcaracteristicasTable extends Migration
 {
     public function up()
     {
-        Schema::create('t_unidadCaracteriticas', function (Blueprint $table) {
+        Schema::create('t_pivot_caracteriticas_unidad', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             
             $table->bigIncrements('unidadCaracteristicas_id');
@@ -16,12 +16,12 @@ class CreateUnidadcaracteristicasTable extends Migration
             $table->bigInteger('caracteristicasUnidad_id')->unsigned();
             
             $table->foreign('unidad_id')->references('unidad_id')->on('t_unidades');
-            $table->foreign('caracteristicasUnidad_id')->references('caracteristicasUnidad_id')->on('t_caracteriticasUnidad');
+            $table->foreign('caracteristicasUnidad_id')->references('caracteristicasUnidad_id')->on('t_caracteriticas_de_unidades');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('t_unidadCaracteriticas');
+        Schema::dropIfExists('t_pivot_caracteriticas_unidad');
     }
 }

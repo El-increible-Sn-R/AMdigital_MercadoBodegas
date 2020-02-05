@@ -8,7 +8,7 @@ class CreateLocalcaracteristicasTable extends Migration
 {
     public function up()
     {
-        Schema::create('t_localCaracteriticas', function (Blueprint $table) {
+        Schema::create('t_pivot_local_caracteriticas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             
             $table->bigIncrements('localCaracteristicas_id');
@@ -16,12 +16,12 @@ class CreateLocalcaracteristicasTable extends Migration
             $table->bigInteger('local_id')->unsigned();
             
             $table->foreign('local_id')->references('local_id')->on('t_locales');
-            $table->foreign('caracteristicasLocal_id')->references('caracteristicasLocal_id')->on('t_caracteriticasLocal');
+            $table->foreign('caracteristicasLocal_id')->references('caracteristicasLocal_id')->on('t_caracteriticas_de_locales');
         });
     }
     
     public function down()
     {
-        Schema::dropIfExists('t_localCaracteriticas');
+        Schema::dropIfExists('t_pivot_local_caracteriticas');
     }
 }

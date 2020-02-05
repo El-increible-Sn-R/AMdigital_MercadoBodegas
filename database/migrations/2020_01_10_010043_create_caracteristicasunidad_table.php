@@ -8,7 +8,7 @@ class CreateCaracteristicasunidadTable extends Migration
 {
     public function up()
     {
-        Schema::create('t_caracteriticasUnidad', function (Blueprint $table) {
+        Schema::create('t_caracteriticas_de_unidades', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             
             $table->bigIncrements('caracteristicasUnidad_id');
@@ -18,6 +18,6 @@ class CreateCaracteristicasunidadTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('t_caracteriticasUnidad');
+        Schema::dropIfExists('t_caracteriticas_de_unidades');
     }
 }

@@ -5,7 +5,7 @@ use App\GrupoCaracteristicas;
 
 class CaracteristicasDeUnLocal extends Model
 {
-    protected $table='t_caracteriticasLocal';
+    protected $table='t_caracteriticas_de_locales';
     public $timestamps = false;  
     protected $primaryKey = 'caracteristicasLocal_id';
 

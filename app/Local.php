@@ -39,7 +39,7 @@ class Local extends Model
     public function Caracteristicas(){
     //este local puede tener muchas caracteriticas
     //este local pertenece a muchas Caracteristicas(tabla"CaracteristicasDeUnLocal"+nombreDelATablaPivot+fkDeLaTablaLocal+LaOtraFKdeLaTablaLocal)
-        return $this->belongsToMany(CaracteristicasDeUnLocal::class,'t_localCaracteriticas','local_id','caracteristicasLocal_id');
+        return $this->belongsToMany(CaracteristicasDeUnLocal::class,'t_pivot_local_caracteriticas','local_id','caracteristicasLocal_id');
     }
     
 

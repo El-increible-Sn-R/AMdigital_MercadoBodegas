@@ -8,7 +8,7 @@ class CreateGrupocaracteriticasTable extends Migration
 {
     public function up()
     {
-        Schema::create('t_grupoCaracteristicas', function (Blueprint $table) {
+        Schema::create('t_grupo_de_caracteristicas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             
             $table->bigIncrements('grupo_id');
@@ -18,6 +18,6 @@ class CreateGrupocaracteriticasTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('t_grupoCaracteristicas');
+        Schema::dropIfExists('t_grupo_de_caracteristicas');
     }
 }

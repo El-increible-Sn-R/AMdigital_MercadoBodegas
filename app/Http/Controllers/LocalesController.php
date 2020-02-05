@@ -26,6 +26,12 @@ class LocalesController extends Controller
     public function show($local_id)
     {
         $local=Local::find($local_id);
+        if(is_null($local)){
+            $MensajeParaRetornar=array(
+                    'mensaje' => 'ingresaste un id de local que no existe',
+                    'status' => 'ERROR');
+            return response()->json($MensajeParaRetornar);;
+        }
         $local->Unidad;
         $local->Horario;
         //$local->Caracteristicasss;

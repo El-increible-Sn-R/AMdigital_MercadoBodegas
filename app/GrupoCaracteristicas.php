@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GrupoCaracteristicas extends Model
 {
-    protected $table='t_grupoCaracteristicas';
+    protected $table='t_grupo_de_caracteristicas';
     public $timestamps = false;  
     protected $primaryKey = 'grupo_id';
 }
