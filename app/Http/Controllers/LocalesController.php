@@ -28,13 +28,39 @@ class LocalesController extends Controller
         $local=Local::find($local_id);
         if(is_null($local)){
             $MensajeParaRetornar=array(
-                    'mensaje' => 'ingresaste un id de local que no existe',
-                    'status' => 'ERROR');
-            return response()->json($MensajeParaRetornar);;
+                'status' => 'ERROR',
+                'mensaje' => 'ingresaste un id de local que no existe');
+            return response()->json($MensajeParaRetornar);
         }
+
+        // $evitarExeso = Local::find($local_id);
+        // $Exeso = Local::find($local_id);
+        // $TodaLaInfoDelLocalPeroBonito = array();
+        // $unidadesDelLocal=array('unidades' => $local->Unidad);
+        // $horariosDelLocal=array('horarios' => $local->Horario);
+        // $GrupoDeCaracteriticasQueTieneUnLocal = [];
+        // $grupoDeCaracteriticas = [];
+
+        // foreach ($local->Caracteristicas as $value) {
+        //     $caracteristicas = $value->GrupoCaracteristicas;
+        //     $caracteristicas['items'] = $Exeso->Caracteristicas->where('grupo_id',$value['grupo_id']);
+        //     foreach ($caracteristicas['items'] as $value) {
+        //         unset($value->pivot);
+        //     }
+        //     array_push($grupoDeCaracteriticas ,$caracteristicas);
+        //     //echo "$value.</br>";//['grupo_caracteristicas'];
+        //     //echo $value['grupo_id'];
+        // }
+        // $GrupoDeCaracteriticasQueTieneUnLocal['grupo']=array_unique($grupoDeCaracteriticas);
+        // array_push($TodaLaInfoDelLocalPeroBonito,
+        //     $evitarExeso,
+        //     $unidadesDelLocal,
+        //     $horariosDelLocal,
+        //     $GrupoDeCaracteriticasQueTieneUnLocal);
+        // return response()->json($TodaLaInfoDelLocalPeroBonito);
+
         $local->Unidad;
         $local->Horario;
-        //$local->Caracteristicasss;
         $local->Caracteristicas;
         //print_r($horario);
         foreach ($local->Caracteristicas as $value) {

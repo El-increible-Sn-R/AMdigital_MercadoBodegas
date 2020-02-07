@@ -18,71 +18,115 @@ class ReservasController extends Controller
     }
 
     public function store(Request $request){
-        $POST_nombre = $request->Input('reserva_nombre','datoGeneradoAutomaticamente');
-        $POST_apellido = $request->Input('reserva_apellido','datoGeneradoAutomaticamente');
-        $POST_telefono = $request->Input('reserva_telefono','000000000');
-        $POST_email = $request->Input('reserva_email',null);
-        $POST_fechaMudanza = $request->Input('reserva_fechaMudanza',null);
-        $POST_unidad = $request->Input('unidad_id',null);        
-        //$TodasLasReservasEnBDD = Reserva::all();
-        //generamos el campo "reserva_codigo":
+
+        $content = json_decode($request->getContent(),true);
+        //array_keys($content);//dv las llaves o indices del array asociativo, en otro array con ""
+        //key($content);//dv la primera llave o indice sin comillas del array asociativo 
+        $POST_nombre=null;
+        $POST_apellido=null;
+        $POST_telefono=null;
+        $POST_email=null;
+        $POST_fechaMudanza=null;
+        $POST_unidad=null;
+        foreach (array_keys($content) as $key) {
+            if($key=='reserva_nombre'){
+                $POST_nombre=$content['reserva_nombre'];
+            }
+            if($key=='reserva_apellido'){
+                $POST_apellido=$content['reserva_apellido'];
+            }    
+            if($key=='reserva_telefono'){
+                $POST_telefono=$content['reserva_telefono'];
+            }
+            if($key=='reserva_email'){
+                $POST_email=$content['reserva_email'];
+            }
+            if($key=='reserva_fechaMudanza'){
+                $POST_fechaMudanza=$content['reserva_fechaMudanza'];
+            }
+            if($key=='unidad_id'){
+                $POST_unidad=$content['unidad_id'];
+            }
+        }
+        // $POST_nombre = $request->Input('reserva_nombre','datoGeneradoAutomaticamente');
+        // $POST_apellido = $request->Input('reserva_apellido','datoGeneradoAutomaticamente');
+        // $POST_telefono = $request->Input('reserva_telefono','000000000');
+        // $POST_email = $request->Input('reserva_email',null);
+        // $POST_fechaMudanza = $request->Input('reserva_fechaMudanza',null);
+        // $POST_unidad = $request->Input('unidad_id',null); 
         $CAMPO_codigo=substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),0,8);
         $SeRealizoLaReserva = true;
         $seColocaronLosDatosMinimosRequeridos = true;
         $TodasLasReservasNOborradas=[];
         $listaParaRetornar = array();
+        $erroresEnListaParaRetornar = array();
         $ventanaDeReservas = 30;
         $fechaDeHoy = date("Y-m-d");     
 
         foreach (Reserva::all() as $value) {
-            //verifica que no exista otro codigo reserva exactamente igual:
+            //verifica que no exista otro codigo reserva exactamente igual asignado a este correo:
             if($value->reserva_estaBorrado=='n'){
                 array_push($TodasLasReservasNOborradas,$value);
             }
         }
 
+        if(is_null($POST_nombre)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un nombre');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+
+        if(is_null($POST_apellido)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un apellido');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+
+        if(is_null($POST_telefono)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un telefono');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+
         if(is_null($POST_email)){
-            $QuintoMensajeParaRetornar=array(
-                    'mensaje' => 'no has ingresado el Correo',
-                    'status' => 'ERROR');
-            array_push($listaParaRetornar ,$QuintoMensajeParaRetornar);
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado el Correo');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
             $seColocaronLosDatosMinimosRequeridos=false;
         } 
 
         if(is_null($POST_unidad)){
-            $SextoMensajeParaRetornar=array(
-                    'mensaje' => 'no has ingresado una unidad',
-                    'status' => 'ERROR');
-            array_push($listaParaRetornar ,$SextoMensajeParaRetornar);
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado una unidad');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
             $seColocaronLosDatosMinimosRequeridos=false;
         }else{
             $unidadIngresada=Unidad::find($POST_unidad);
             if($unidadIngresada == null){
-                $SextoMensajeParaRetornar=array(
-                    'mensaje' => 'ingresaste un id de unidad que no existe',
-                    'status' => 'ERROR');
-                array_push($listaParaRetornar ,$SextoMensajeParaRetornar);
+                $MensajeParaRetornar=array('mensaje' => 'ingresaste un id de unidad que no existe');
+                array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
                 $seColocaronLosDatosMinimosRequeridos=false;
             }
         } 
 
         if($seColocaronLosDatosMinimosRequeridos==false){
+            $listaParaRetornar['status']='ERROR';
+            $listaParaRetornar['items']=$erroresEnListaParaRetornar;
+            //array_push($listaParaRetornar ,$MensajeParaRetornar);
             return response()->json($listaParaRetornar);
         }
         
         if(is_null($POST_fechaMudanza)){
-            $PrimerMensajeParaRetornar=array(
-                    'mensaje' => 'no has ingresado la fecha de mudanza; se te asignara la fecha maxima permitidad por la ventana de reserva',
-                    'status' => 'advertencia');
-            array_push($listaParaRetornar ,$PrimerMensajeParaRetornar);
+            $MensajeParaRetornar=array(
+                    'mensaje' => 'ten en cuenta que no has ingresado la fecha de mudanza; se te asignara la fecha maxima permitidad por la ventana de reserva');
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
             $POST_fechaMudanza = date("Y-m-d",strtotime($fechaDeHoy."+$ventanaDeReservas days"));
         } 
         
         if($fechaDeHoy > $POST_fechaMudanza){
-            $SegundoMensajeParaRetornar=array(
-                    'mensaje' => "no puedes ingresar tal fecha: $fechaDeHoy > $POST_fechaMudanza ",
-                    'status' => 'ERROR');
-            array_push($listaParaRetornar ,$SegundoMensajeParaRetornar);
+            $MensajeParaRetornar=array(
+                    'mensaje' => "no puedes ingresar tal fecha: $fechaDeHoy > $POST_fechaMudanza ");
+            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+            $listaParaRetornar['status']='ERROR';
+            $listaParaRetornar['items']=$erroresEnListaParaRetornar;
             return response()->json($listaParaRetornar);
         }else{
             // echo "si puedes ingresar tal fecha: $fechaDeHoy < $POST_fechaMudanza ";
@@ -93,10 +137,9 @@ class ReservasController extends Controller
                     $reserva->unidad_id==$POST_unidad){
                     //echo $reserva->UnidadReserva."<br>";
                     //print_r($value);
-                    $TercerMensajeParaRetornar=array(
-                        'mensaje' => 'sospechoso de duplicado',
-                        'status' => 'ERROR');
-                    array_push($listaParaRetornar ,$TercerMensajeParaRetornar);
+                    $MensajeParaRetornar=array(
+                        'mensaje' => 'sospechoso de duplicado');
+                    array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
                     //echo "sospechoso de duplicado";
                     $SeRealizoLaReserva = false;
                 }
@@ -140,10 +183,12 @@ class ReservasController extends Controller
             //Mail::to($POST_email)->send(new ConfirmacionDeReserva($DatosNecesarios));
             ////////////////////////////////////////////////////////////////////////
             //return $ReservaCreada;
-            $CuartoMensajeParaRetornar=array(
+            $MensajeParaRetornar=array(
                 'mensaje' => 'reserva creada con exito',
-                'status' => 'ok');
-            array_push($listaParaRetornar,$CuartoMensajeParaRetornar);
+                'cuerpo' => $ReservaCreada);
+            array_push($erroresEnListaParaRetornar,$MensajeParaRetornar);
+            $listaParaRetornar['status']='OK';
+            $listaParaRetornar['items']=$erroresEnListaParaRetornar;
             return response()->json($listaParaRetornar);
         }
         return response()->json($listaParaRetornar);
@@ -185,14 +230,10 @@ class ReservasController extends Controller
     }
     
     public function LoginParaModificarReserva(Request $request){
-        /////////////////////////////////////////////////////////////////////////////////12soles///
         $llave = true;
         $lista = array();
         //$POST_email = $request->Input('login_correo');
         //$POST_codigo = $request->Input('login_codigo');
-        //echo ($request);
-        //print_r($request->getContent());
-        
         $content = json_decode($request->getContent(),true);    
         $POST_email=$content['login_correo'];
         $POST_codigo=$content['login_codigo'];
