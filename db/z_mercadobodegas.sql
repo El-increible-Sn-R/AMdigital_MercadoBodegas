@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-02-2020 a las 16:46:05
+-- Tiempo de generación: 10-02-2020 a las 20:28:57
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -34,26 +34,26 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(14, '2020_01_10_005332_create_usuarios_table', 1),
-(15, '2020_01_10_005416_create_empresas_table', 1),
-(16, '2020_01_10_005448_create_locales_table', 1),
-(17, '2020_01_10_005530_create_galerias_table', 1),
-(18, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
-(19, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
-(20, '2020_01_10_005854_create_localcaracteristicas_table', 1),
-(21, '2020_01_10_005938_create_unidades_table', 1),
-(22, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
-(23, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
-(24, '2020_01_10_010313_create_reservas_table', 1),
-(25, '2020_01_10_010400_create_visitas_table', 1),
-(26, '2020_01_10_010417_create_horario_table', 1);
+(27, '2020_01_10_005332_create_usuarios_table', 1),
+(28, '2020_01_10_005416_create_empresas_table', 1),
+(29, '2020_01_10_005448_create_locales_table', 1),
+(30, '2020_01_10_005530_create_galerias_table', 1),
+(31, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
+(32, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
+(33, '2020_01_10_005854_create_localcaracteristicas_table', 1),
+(34, '2020_01_10_005938_create_unidades_table', 1),
+(35, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
+(36, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
+(37, '2020_01_10_010313_create_reservas_table', 1),
+(38, '2020_01_10_010400_create_visitas_table', 1),
+(39, '2020_01_10_010417_create_horario_table', 1);
 
 -- --------------------------------------------------------
 
@@ -318,6 +318,7 @@ CREATE TABLE IF NOT EXISTS `t_locales` (
   `local_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_pais` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `local_provincia` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_direccion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `usuario_id` bigint(20) UNSIGNED NOT NULL,
@@ -334,17 +335,17 @@ CREATE TABLE IF NOT EXISTS `t_locales` (
 -- Volcado de datos para la tabla `t_locales`
 --
 
-INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_comuna`, `local_direccion`, `usuario_id`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
-(1, 'local de prueba uno', 'descripcion', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Argentina 126, Arequipa 04004, Perú', 1, -16.382547, -71.519298, '20', 'n'),
-(2, 'local de prueba dos', 'descripcion', 2, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', 1, -36.807547, -73.066322, '20', 'n'),
-(3, 'local de prueba tres', 'descripcion', 2, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', 1, -33.518138, -70.61986, '20', 'n'),
-(4, 'local de prueba cuatro', 'descripcion', 2, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', 1, -33.462733, -70.742522, '20', 'n'),
-(5, 'local de prueba cinco', 'descripcion', 2, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', 1, -18.470816, -70.296328, '20', 'n'),
-(6, 'local de Paucarpata', 'local de bodegas en Paucarpata muy serca del mall aventura plaza con 3 unidades de 3 metros cuadrados cada uno y 30 dias de ventana de reserva', 1, 666666666, 'LocalPaucarpata@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'John F. Kennedy 1201-803, Arequipa 04002', 1, -16.41925, -71.509139, '30', 'n'),
-(7, 'local del Cercado', 'local en el Cercado de Arequipa por las proximidades del centro historico con 6 unidades de variados tamaños y 20 dias de ventana de reserva', 1, 777777777, 'emailDelLocalCercado@gmail.com', 'Perú', 'Arequipa', 'Arequipa', 'Centro Histórico, Arequipa 04001', 1, -16.400233, -71.537364, '20', 'n'),
-(8, 'local de Miraflores', 'local en el distrito de miraflores cerca al cementerio municipal, con 5 unidades de un area menor a 10 metros cuadrados no ofrece una ventana de reserva', 1, 888888888, 'localMiraflorino@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Miraflores 04004', 1, -16.374467, -71.495023, '0', 'n'),
-(9, 'local de Cayma', 'local ubicado al frente del estadio Bolognesi con 4 unidades de 5 metros cuadrados cada uno y sin una ventana de reserva', 1, 999999999, 'localDeCayama@algo.com', 'Perú', 'Arequipa', 'Arequipa', 'Calle Aviación 1018, Arequipa 04018', 1, -16.345504, -71.542861, '0', 'n'),
-(10, 'local de Bustamante y Ribero', 'este local acaba de ser inagurado, no posee unidades activas aun', 1, 101010101, 'JoseLuisBustamanteyRibero@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Auxiliar Av. Dolores, Arequipa 04009', 1, -16.426415, -71.52449, '0', 'n');
+INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_provincia`, `local_comuna`, `local_direccion`, `usuario_id`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
+(1, 'local de prueba uno', 'descripcion', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Alto Selva Alegre', 'Argentina 126, Arequipa 04004, Perú', 1, -16.382547, -71.519298, '20', 'n'),
+(2, 'local de prueba dos', 'descripcion', 2, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', 1, -36.807547, -73.066322, '20', 'n'),
+(3, 'local de prueba tres', 'descripcion', 2, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', 1, -33.518138, -70.61986, '20', 'n'),
+(4, 'local de prueba cuatro', 'descripcion', 2, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', 1, -33.462733, -70.742522, '20', 'n'),
+(5, 'local de prueba cinco', 'descripcion', 2, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', 1, -18.470816, -70.296328, '20', 'n'),
+(6, 'local de Paucarpata', 'local de bodegas en Paucarpata muy serca del mall aventura plaza con 3 unidades de 3 metros cuadrados cada uno y 30 dias de ventana de reserva', 1, 666666666, 'LocalPaucarpata@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Paucarpata', 'John F. Kennedy 1201-803, Arequipa 04002', 1, -16.41925, -71.509139, '30', 'n'),
+(7, 'local del Cercado', 'local en el Cercado de Arequipa por las proximidades del centro historico con 6 unidades de variados tamaños y 20 dias de ventana de reserva', 1, 777777777, 'emailDelLocalCercado@gmail.com', 'Perú', 'Arequipa', 'Arequipa', 'Cercado', 'Centro Histórico, Arequipa 04001', 1, -16.400233, -71.537364, '20', 'n'),
+(8, 'local de Miraflores', 'local en el distrito de miraflores cerca al cementerio municipal, con 5 unidades de un area menor a 10 metros cuadrados no ofrece una ventana de reserva', 1, 888888888, 'localMiraflorino@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Miraflores', 'Miraflores 04004', 1, -16.374467, -71.495023, '0', 'n'),
+(9, 'local de Cayma', 'local ubicado al frente del estadio Bolognesi con 4 unidades de 5 metros cuadrados cada uno y sin una ventana de reserva', 1, 999999999, 'localDeCayma@algo.com', 'Perú', 'Arequipa', 'Arequipa', 'Cayma', 'Calle Aviación 1018, Arequipa 04018', 1, -16.345504, -71.542861, '0', 'n'),
+(10, 'local de Bustamante y Ribero', 'este local acaba de ser inagurado, no posee unidades activas aun', 1, 101010101, 'JoseLuisBustamanteyRibero@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Jose Luis Bustamante y Ribero', 'Auxiliar Av. Dolores, Arequipa 04009', 1, -16.426415, -71.52449, '0', 'n');
 
 -- --------------------------------------------------------
 
@@ -493,7 +494,7 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
   `reserva_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_telefono` bigint(20) NOT NULL,
-  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-10 16:38:00',
+  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-10 19:21:04',
   `reserva_fechaMudanza` date DEFAULT '2020-02-10',
   `reserva_estado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `reserva_estaBorrado` enum('s','n') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
@@ -509,11 +510,11 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
 --
 
 INSERT INTO `t_reservas` (`reserva_id`, `reserva_nombre`, `reserva_apellido`, `reserva_email`, `reserva_telefono`, `reserva_fechaRegistro`, `reserva_fechaMudanza`, `reserva_estado`, `reserva_estaBorrado`, `unidad_id`, `reserva_codigo`, `reserva_token_edition`) VALUES
-(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-10 11:43:34', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
-(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-10 16:38:00', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
-(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-10 16:38:00', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
-(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-10 16:38:00', '2020-02-10', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
-(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-10 16:38:00', '2020-02-10', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
+(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-10 14:25:32', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
+(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-10 19:21:04', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
+(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-10 19:21:04', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
+(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-10 19:21:04', '2020-02-10', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
+(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-10 19:21:04', '2020-02-10', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
 
 -- --------------------------------------------------------
 
@@ -604,7 +605,7 @@ CREATE TABLE IF NOT EXISTS `t_visitas` (
   `visitas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `visitas_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `visitas_fecha` datetime NOT NULL DEFAULT '2020-02-10 00:00:00',
-  `visitas_hora` time NOT NULL DEFAULT '16:38:03',
+  `visitas_hora` time NOT NULL DEFAULT '19:21:07',
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`visitas_id`),
   KEY `t_visitas_local_id_foreign` (`local_id`)

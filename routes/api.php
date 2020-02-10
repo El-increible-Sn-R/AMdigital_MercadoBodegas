@@ -21,10 +21,13 @@ Route::group(['middleware'=>'cors'],function(){
 
     //-------------------------------------------RESERVAS----------------------------------------------------
     //ruta para mostrar todas las reservas: http://localhost:8000/api/reservas
-    //ruta para insertar una reserva://http://localhost:8000/api/reservas + (algo por POST)
+    //ruta para insertar una reserva://http://localhost:8000/api/reservas + (algo por POST)//---en completo desuso
     //ruta para actualisar una reserva://http://localhost:8000/api/reservas/{id} + (algo por PUT)//----nel
     //ruta que retorna una reserva por id: http://localhost:8000/api/reservas/{id}
     Route::resource('/reservas','ReservasController');
+
+    //ruta que retorna una reserva por codigo de reserva:
+    Route::get('/reservas/buscarReserva/{reserva_codigo}','ReservasController@buscarReservaPorCodigo');
 
     //ruta para borrar una reserva: http://localhost:8000/api/reservas/borrar/6
     Route::get('/reservas/borrar/{id}','ReservasController@BorradoLogico');  
@@ -35,6 +38,7 @@ Route::group(['middleware'=>'cors'],function(){
     //ruta para modificar/actualisar una reserva:
     Route::post('/reservas/modificarReserva','ReservasController@ActualizarUnaReserva');
 
+    //ruta para insertar una reserva:
     Route::post('/reservas/insertarReserva','ReservasController@store');
     
 });

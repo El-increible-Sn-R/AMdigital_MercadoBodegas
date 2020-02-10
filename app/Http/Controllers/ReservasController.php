@@ -17,6 +17,21 @@ class ReservasController extends Controller
         //NO PARA APIS
     }
 
+    public function buscarReservaPorCodigo($reserva_codigo){
+        //$reserva->reserva_email
+
+        // $reserva=Reserva::where('reserva_codigo',$reserva_codigo)->get();
+        // if($reserva->isEmpty()){
+        //     $MensajeParaRetornar=array(
+        //         'status' => 'ERROR',
+        //         'mensaje' => 'ingresaste un codigo de una reserva que no existe');
+        //     return response()->json($MensajeParaRetornar);
+        // }
+        // $reserva->Unidad;
+        // $reserva->Unidad->Local;
+        // return $reserva;
+    }
+
     public function store(Request $request){
 
         $content = json_decode($request->getContent(),true);

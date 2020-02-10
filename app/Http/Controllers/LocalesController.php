@@ -90,13 +90,19 @@ class LocalesController extends Controller
         //$TodoslosLocales=Local::all();
         $LoQueIngresoElUsuario=$r->get('ubicacion');
         
-        $LocalSegunPais=Local::where('local_pais','LIKE',"$LoQueIngresoElUsuario")
-                ->orWhere('local_region','LIKE',"$LoQueIngresoElUsuario")
-                ->orWhere('local_comuna','LIKE',"$LoQueIngresoElUsuario")
+        $LocalSegunPais=Local::where('local_pais','LIKE',"%$LoQueIngresoElUsuario%")
+                ->orWhere('local_region','LIKE',"%$LoQueIngresoElUsuario%")
+                ->orWhere('local_provincia','LIKE',"%$LoQueIngresoElUsuario%")
+                ->orWhere('local_comuna','LIKE',"%$LoQueIngresoElUsuario%")
                 ->orWhere('local_direccion','LIKE',"%$LoQueIngresoElUsuario%")->get();
         //print_r($LocalSegunPais);----->para el front tener un json especifico
         if($LocalSegunPais->isEmpty()){
-            return "no hay coincidencias";
+
+            $lista=array(
+                'status' => 'ERROR',
+                'mensaje' => 'no hay coincidencias');
+                //array_push($loQueSeDv,$value);
+            return response()->json($lista);
             
         }else{
             //$r=$LocalSegunPais->Unidad; ///esto sale error por que es una arrya no un objeto

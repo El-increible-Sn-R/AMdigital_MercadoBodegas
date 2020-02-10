@@ -18,8 +18,9 @@ class CreateLocalesTable extends Migration
             $table->bigInteger('local_telefono')->unsigned();
             $table->string('local_email',255);
             $table->string('local_pais',255);
-            $table->string('local_region',255);
-            $table->string('local_comuna',255);
+            $table->string('local_region',255);//en peru: departamento
+            $table->string('local_provincia',255);//en peru: Provincia 
+            $table->string('local_comuna',255);//en peru: distritos
             $table->string('local_direccion',255);
             $table->bigInteger('usuario_id')->unsigned();
             $table->double('local_latitud');
