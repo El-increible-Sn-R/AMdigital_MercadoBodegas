@@ -2,6 +2,7 @@
 namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\GrupoCaracteristicas;
+//php artisan make:model nombre
 
 class CaracteristicasDeUnLocal extends Model
 {

@@ -7,10 +7,29 @@ class LocalesController extends Controller
 {
     public function index()
     {
-        //mostar todo:
-        //return Local::all();
-        //mostrar todo con las unidades:
-        return Local::with('Unidad')->get();
+        //////hacerlo de esta forma oftendras, una {} por cada local: 
+        //return Local::with('Unidad.caracteristicas:pivot')->get();//->makeHidden(['unidad']);
+        //equivalente a:
+        //select `pivot`, `t_pivot_caracteriticas_unidad`.`unidad_id` as `pivot_unidad_id`, `t_pivot_caracteriticas_unidad`.`caracteristicasUnidad_id` as `pivot_caracteristicasUnidad_id` from `t_caracteriticas_de_unidades` inner join `t_pivot_caracteriticas_unidad` on `t_caracteriticas_de_unidades`.`caracteristicasUnidad_id` = `t_pivot_caracteriticas_unidad`.`caracteristicasUnidad_id` where `t_pivot_caracteriticas_unidad`.`unidad_id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27)
+        //(agrega esto para quitar 'unidad_id')->makeHidden(['unidad_id']);
+        //[
+        //  -{}
+        //  -{}
+        //]
+        //////de esta otra forma, igual xD:
+        $TodoslosLocales=Local::all();
+        foreach ($TodoslosLocales as  $value) {
+            foreach ($value->Unidad as $value2) {
+                foreach ($value2->caracteristicas as $value3) {
+                    $value3->makeHidden(['pivot']);
+                }
+            }
+        }
+        return $TodoslosLocales;
+        //[
+        //  -{}
+        //  -{}
+        //]
     }
 
     public function create()
@@ -59,8 +78,19 @@ class LocalesController extends Controller
         //     $GrupoDeCaracteriticasQueTieneUnLocal);
         // return response()->json($TodaLaInfoDelLocalPeroBonito);
 
-        $local->Unidad;
-        $local->Horario;
+        //$unidadesDeLosLocales=$local->Unidad;
+        //$local->Unidad;
+        foreach ($local->Unidad as $value) {
+            //$value->Caracteristicas;
+            //$value->makeHidden(['Caracteristicas']);
+            foreach ($value->Caracteristicas as $value) {
+                $value->makeHidden(['pivot']);//ocultar el pivot
+            }
+        }
+        //$local->Horario;
+        foreach ($local->Horario as $value) {
+            $local->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
+        }
         $local->Caracteristicas;
         //print_r($horario);
         foreach ($local->Caracteristicas as $value) {

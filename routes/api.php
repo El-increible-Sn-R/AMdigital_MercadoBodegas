@@ -26,13 +26,13 @@ Route::group(['middleware'=>'cors'],function(){
     //ruta que retorna una reserva por id: http://localhost:8000/api/reservas/{id}
     Route::resource('/reservas','ReservasController');
 
-    //ruta que retorna una reserva por codigo de reserva:
+    //dv una reserva por codigo de reserva:http://localhost:8000/api/reservas/buscarReserva/T188VFB7
     Route::get('/reservas/buscarReserva/{reserva_codigo}','ReservasController@buscarReservaPorCodigo');
 
     //ruta para borrar una reserva: http://localhost:8000/api/reservas/borrar/6
     Route::get('/reservas/borrar/{id}','ReservasController@BorradoLogico');  
     
-    //ruta para el login de modificar una reserva: http://localhost:8000/api/reservas/loginModificarReserva
+    //ruta login de modificar una reserva: http://localhost:8000/api/reservas/loginModificarReserva
     Route::post('/reservas/loginModificarReserva','ReservasController@LoginParaModificarReserva');
     
     //ruta para modificar/actualisar una reserva:
