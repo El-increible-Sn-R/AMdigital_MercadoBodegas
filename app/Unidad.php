@@ -8,6 +8,8 @@ class Unidad extends Model
 {
     protected $table='t_unidades';
     protected $primaryKey = 'unidad_id';
+    //este array tiene las columnas que queremos permitir que puedan ser cargadas masivamente:
+    protected $fillable=['unidad_oferta'];
     
     public function Local(){
         //nombreModelo//campo fk en tu tabla//id de la tabla a la ke hace referencia tu fk

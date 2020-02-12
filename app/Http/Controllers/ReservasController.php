@@ -195,7 +195,7 @@ class ReservasController extends Controller
             $DatosNecesarios->horarioDeAcceso = $HorarioDeAtencion;
             $DatosNecesarios->datosDeLaUnidad = $ReservaCreada->Unidad;
             $DatosNecesarios->datosDelLocal = $ReservaCreada->Unidad->Local;
-            //Mail::to($POST_email)->send(new ConfirmacionDeReserva($DatosNecesarios));
+            Mail::to($POST_email)->send(new ConfirmacionDeReserva($DatosNecesarios));
             ////////////////////////////////////////////////////////////////////////
             //return $ReservaCreada;
             $MensajeParaRetornar=array(

@@ -89,7 +89,8 @@ class LocalesController extends Controller
         }
         //$local->Horario;
         foreach ($local->Horario as $value) {
-            $local->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
+            $value->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
+            $value->horario_horaSalida = date("H:i", strtotime($value->horario_horaEntrada));
         }
         $local->Caracteristicas;
         //print_r($horario);
