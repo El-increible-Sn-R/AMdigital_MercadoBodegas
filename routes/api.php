@@ -20,10 +20,9 @@ Route::group(['middleware'=>'cors'],function(){
 
     //-------------------------------------------RESERVAS-------------------------------------------
     //dv todas las reservas:http://localhost:8000/api/reservas
-    //Para insertar una reserva:http://localhost:8000/api/reservas + (algo por POST)--- 
-    //Para actualisar una reserva://http://localhost:8000/api/reservas/{id} + (algo por PUT)---
     //dv una reserva por id: http://localhost:8000/api/reservas/{id}
-    Route::resource('/reservas','ReservasController');
+    Route::resource('/reservas','ReservasController')->only(
+        ['index','show']);
 
     //dv una reserva por codigo:http://localhost:8000/api/reservas/buscarReserva/T188VFB7
     Route::get('/reservas/buscarReserva/{reserva_codigo}','ReservasController@buscarReservaPorCodigo');
@@ -37,10 +36,18 @@ Route::group(['middleware'=>'cors'],function(){
     //ruta para modificar/actualisar una reserva:
     Route::post('/reservas/modificarReserva','ReservasController@ActualizarUnaReserva');
 
-    //ruta para insertar una reserva:
+    //ruta para insertar una reserva:http://localhost:8000/api/reservas/insertarReserva
     Route::post('/reservas/insertarReserva','ReservasController@store');
     
     //--------------------------------------------UNIDADES------------------------------------------
     //dv todas las unidades:http://localhost:8000/api/unidades
-    Route::apiResource('/unidades','UnidadController');
+    //insetar una unidad:http://localhost:8000/api/unidades+(json por POST) 
+    //dv una unidad por id:http://localhost:8000/api/unidades/{id}  
+    Route::apiResource('/unidades','UnidadController')->only(
+        ['index','store','show']);
+
+    //actualizar una unidad:http://localhost:8000/api/unidades/{id}+(json por POST) 
+    Route::post('/unidades/{id}','UnidadController@update');
+
+    //eliminar una unidad:
 });

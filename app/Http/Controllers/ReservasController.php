@@ -280,9 +280,6 @@ class ReservasController extends Controller
         if($llave==false){
             return response()->json($lista);
         }
-
-        ///////caprichos random////////
-        //echo $request;
     }
     
     public function ActualizarUnaReserva(Request $request){
