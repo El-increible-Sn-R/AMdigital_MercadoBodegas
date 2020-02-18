@@ -21,8 +21,7 @@ Route::group(['middleware'=>'cors'],function(){
     //-------------------------------------------RESERVAS-------------------------------------------
     //dv todas las reservas:http://localhost:8000/api/reservas
     //dv una reserva por id: http://localhost:8000/api/reservas/{id}
-    Route::resource('/reservas','ReservasController')->only(
-        ['index','show']);
+    Route::resource('/reservas','ReservasController')->only(['index','show']);
 
     //dv una reserva por codigo:http://localhost:8000/api/reservas/buscarReserva/T188VFB7
     Route::get('/reservas/buscarReserva/{reserva_codigo}','ReservasController@buscarReservaPorCodigo');
@@ -51,3 +50,5 @@ Route::group(['middleware'=>'cors'],function(){
 
     //eliminar una unidad:
 });
+//consultas espaciales en laravel
+//como hace laravel para servir imagenes estaticas

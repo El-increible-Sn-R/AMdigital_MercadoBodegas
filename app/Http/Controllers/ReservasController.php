@@ -69,14 +69,16 @@ class ReservasController extends Controller
         // $POST_email = $request->Input('reserva_email',null);
         // $POST_fechaMudanza = $request->Input('reserva_fechaMudanza',null);
         // $POST_unidad = $request->Input('unidad_id',null); 
-        $CAMPO_codigo=substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),0,8);
         $SeRealizoLaReserva = true;
         $seColocaronLosDatosMinimosRequeridos = true;
         $TodasLasReservasNOborradas=[];
         $listaParaRetornar = array();
         $erroresEnListaParaRetornar = array();
         $ventanaDeReservas = 30;
-        $fechaDeHoy = date("Y-m-d");     
+        $fechaDeHoy = date("Y-m-d");  
+        $fechaDeHoyConMilisegundos = microtime(true); 
+        $CAMPO_codigo=substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),0,8);
+        $CAMPO_token=md5($POST_email.$fechaDeHoyConMilisegundos);   
 
         foreach (Reserva::all() as $value) {
             //verifica que no exista otro codigo reserva exactamente igual asignado a este correo:
@@ -131,7 +133,7 @@ class ReservasController extends Controller
         
         if(is_null($POST_fechaMudanza)){
             $MensajeParaRetornar=array(
-                    'mensaje' => 'ten en cuenta que no has ingresado la fecha de mudanza; se te asignara la fecha maxima permitidad por la ventana de reserva');
+                    'advertencia' => 'ten en cuenta que no has ingresado la fecha de mudanza; se te asignara la fecha maxima permitidad por la ventana de reserva');
             array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
             $POST_fechaMudanza = date("Y-m-d",strtotime($fechaDeHoy."+$ventanaDeReservas days"));
         } 
@@ -187,7 +189,7 @@ class ReservasController extends Controller
                      'reserva_estaBorrado' => 'n',
                      'unidad_id' => $POST_unidad,
                      'reserva_codigo' => $CAMPO_codigo,
-                     'reserva_token_edition'=>"TOKENcreadoAloBESTIA"]);
+                     'reserva_token_edition'=>$CAMPO_token]);
             ///////////////////Enviar Correo de Confirmacion//////////////////////
             $DatosNecesarios = new \stdClass();
             $DatosNecesarios->codigoConfirmacion = $CAMPO_codigo;
@@ -195,7 +197,7 @@ class ReservasController extends Controller
             $DatosNecesarios->horarioDeAcceso = $HorarioDeAtencion;
             $DatosNecesarios->datosDeLaUnidad = $ReservaCreada->Unidad;
             $DatosNecesarios->datosDelLocal = $ReservaCreada->Unidad->Local;
-            Mail::to($POST_email)->send(new ConfirmacionDeReserva($DatosNecesarios));
+            //Mail::to($POST_email)->send(new ConfirmacionDeReserva($DatosNecesarios));
             ////////////////////////////////////////////////////////////////////////
             //return $ReservaCreada;
             $MensajeParaRetornar=array(
@@ -205,8 +207,11 @@ class ReservasController extends Controller
             $listaParaRetornar['status']='OK';
             $listaParaRetornar['items']=$erroresEnListaParaRetornar;
             return response()->json($listaParaRetornar);
+        }else{
+            $listaParaRetornar['status']='ERROR';
+            $listaParaRetornar['items']=$erroresEnListaParaRetornar;
+            return response()->json($listaParaRetornar);
         }
-        return response()->json($listaParaRetornar);
     }
 
     public function show($id)
@@ -246,62 +251,121 @@ class ReservasController extends Controller
     
     public function LoginParaModificarReserva(Request $request){
         $llave = true;
-        $lista = array();
-        //$POST_email = $request->Input('login_correo');
-        //$POST_codigo = $request->Input('login_codigo');
+        $seColocaronLosDatosMinimosRequeridos=true;
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
         $content = json_decode($request->getContent(),true);    
-        $POST_email=$content['login_correo'];
-        $POST_codigo=$content['login_codigo'];
+        $POST_email=null;
+        $POST_codigo=null;
         //print_r($content['login_correo']);
-
-        $TodasLasReservasNOborradas=[];
-        foreach (Reserva::all() as $value) {
-            if($value->reserva_estaBorrado=='n'){
-                array_push($TodasLasReservasNOborradas,$value);
+        foreach (array_keys($content) as $key) {
+            if($key=='login_correo'){
+                $POST_email=$content['login_correo'];
+            }
+            if($key=='login_codigo'){
+                $POST_codigo=$content['login_codigo'];
             }
         }
-        foreach ($TodasLasReservasNOborradas as $reserva) {
+        if(is_null($POST_email)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un email');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+        if(is_null($POST_codigo)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un codigo');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+        if($seColocaronLosDatosMinimosRequeridos==false){
+            $loQueSeDv['status']='ERROR';
+            $loQueSeDv['items']=$ListaParaRetornar;
+            //array_push($listaParaRetornar ,$MensajeParaRetornar);
+            return response()->json($loQueSeDv);
+        }
+        foreach (Reserva::all()->where('reserva_estaBorrado','n') as $reserva) {
         
             if($reserva->reserva_email==$POST_email && $reserva->reserva_codigo==$POST_codigo){
-                $lista=array(
+                $items=array(
                     'mensaje' => 'login correcto',
-                    'token' => $reserva->reserva_token_edition,
-                    'status' => 'ok');
-                //array_push($loQueSeDv,$value);
-                return response()->json($lista);
+                    'token' => $reserva->reserva_token_edition);
+                $loQueSeDv['status']='OK';
+                $loQueSeDv['items']=$items;
+                return response()->json($loQueSeDv);
             }else{
-                $lista=array(
-                    'mensaje' => 'login incorrecto',
-                    'status' => 'ERROR');
+                $items=array('mensaje' => 'login incorrecto');
                 //array_push($loQueSeDv,$value);
+                $loQueSeDv['status']='ERROR';
+                $loQueSeDv['items']=$items;
                 $llave = false;
             }
         }
         if($llave==false){
-            return response()->json($lista);
+            return response()->json($loQueSeDv);
         }
     }
     
     public function ActualizarUnaReserva(Request $request){
-        $POST_nombre = $request->Input('reserva_nombre',null);
-        $POST_apellido = $request->Input('reserva_apellido',null);
-        $POST_email = $request->Input('login_correo');
-        $POST_telefono = $request->Input('reserva_telefono',null);
-        $POST_fechaMudanza = $request->Input('reserva_fechaMudanza',null);
-        $POST_token = $request->Input('reserva_token_edition');
-        $POST_codigo = $request->Input('login_codigo');     
-        //$cambios=true;
-        $TodasLasReservasNOborradas=[];
-        foreach (Reserva::all() as $value) {
-            if($value->reserva_estaBorrado=='n'){
-                array_push($TodasLasReservasNOborradas,$value);
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
+        $seColocaronLosDatosMinimosRequeridos=true;
+        $seColocaronDatosDeActualizacion=true;
+        $content = json_decode($request->getContent(),true);    
+        $POST_nombre=null;
+        $POST_apellido=null;
+        $POST_email=null;
+        $POST_telefono=null;
+        $POST_fechaMudanza=null;
+        $POST_token=null;
+        $POST_codigo=null;
+        foreach (array_keys($content) as $key) {
+            if($key=='reserva_nombre'){
+                $POST_nombre=$content['reserva_nombre'];
+            }
+            if($key=='reserva_apellido'){
+                $POST_apellido=$content['reserva_apellido'];
+            }
+            if($key=='login_correo'){
+                $POST_email=$content['login_correo'];
+            }
+            if($key=='reserva_telefono'){
+                $POST_telefono=$content['reserva_telefono'];
+            }
+            if($key=='reserva_fechaMudanza'){
+                $POST_fechaMudanza=$content['reserva_fechaMudanza'];
+            }
+            if($key=='reserva_token_edition'){
+                $POST_token=$content['reserva_token_edition'];
+            }
+            if($key=='login_codigo'){
+                $POST_codigo=$content['login_codigo'];
             }
         }
-        foreach ($TodasLasReservasNOborradas as $reserva) {
+        if(is_null($POST_token)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un token');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+        if(is_null($POST_codigo)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un codigo');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+        if(is_null($POST_email)){
+            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un email');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+            $seColocaronLosDatosMinimosRequeridos=false;
+        }
+        if($seColocaronLosDatosMinimosRequeridos==false){
+            $loQueSeDv['status']='ERROR';
+            $loQueSeDv['items']=$ListaParaRetornar;
+            //array_push($listaParaRetornar ,$MensajeParaRetornar);
+            return response()->json($loQueSeDv);
+        }
+        foreach (Reserva::all()->where('reserva_estaBorrado','n') as $reserva) {
             if($reserva->reserva_email == $POST_email && 
-                $reserva->reserva_codigo == $POST_codigo && 
-                $reserva->reserva_token_edition == $POST_token){
-                //$camposDeReserva=array('reserva_nombre','reserva_apellido','reserva_telefono','reserva_fechaMudanza');
+            $reserva->reserva_codigo == $POST_codigo && 
+            $reserva->reserva_token_edition == $POST_token){
+                $hoydia=date("Y-m-d");
                 if(is_null($POST_nombre)==false){
                     //unset($camposDeReserva[0]);
                     $reserva->reserva_nombre=$POST_nombre;
@@ -315,18 +379,29 @@ class ReservasController extends Controller
                     $reserva->reserva_telefono=$POST_telefono;
                 }
                 if(is_null($POST_fechaMudanza)==false){
+                    if($hoydia > $POST_fechaMudanza){
+                        $MensajeParaRetornar=array(
+                            'mensaje' => "no puedes ingresar tal fecha: $hoydia > $POST_fechaMudanza ");
+                        array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                        $loQueSeDv['status']='ERROR';
+                        $loQueSeDv['items']=$ListaParaRetornar;
+                        return response()->json($loQueSeDv);
+                    }
                     $reserva->reserva_fechaMudanza=$POST_fechaMudanza;
                 }
                 $reserva->save();
-                return $reserva;
+                $items=array(
+                    'mensaje' => 'actuazilacion realizada con exito, en caso de no ingresar datos nuevos, la reserva continuara sin cambios',
+                    'cuerpo' => $reserva);
+                $loQueSeDv['status']='OK';
+                $loQueSeDv['items']=$items;
+                return response()->json($loQueSeDv);
             }
-//            else{
-//                $cambios = false;
-//            }
         }
-        //if($cambios==false){
-        echo "no se cambio nada";
-        //}
-    }
-    
+        $items=array(
+            'mensaje' => 'no se realizo ninguna actuazilacion');
+        $loQueSeDv['status']='ERROR';
+        $loQueSeDv['items']=$items;
+        return response()->json($loQueSeDv);
+    }   
 }
