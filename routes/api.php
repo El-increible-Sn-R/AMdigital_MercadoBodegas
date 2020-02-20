@@ -51,8 +51,8 @@ Route::group(['middleware'=>'cors'],function(){
     //eliminar una unidad:
 
     //--------------------------------------------IMAGENES---------------------------------------
-    Route::get('/static/imagenes/{id}', function() {
-        return File::get(public_path() . '/var/www/html/AMdigital_MercadoBodegas/');
+    Route::get('/static/imagenes', function() {
+        return File::get(public_path().'/var/www/html/AMdigital_MercadoBodegas/static/imagenes');
     });
 });
 //consultas espaciales en laravel
