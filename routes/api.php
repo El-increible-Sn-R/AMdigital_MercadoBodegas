@@ -49,6 +49,11 @@ Route::group(['middleware'=>'cors'],function(){
     Route::post('/unidades/{id}','UnidadController@update');
 
     //eliminar una unidad:
+
+    //--------------------------------------------IMAGENES---------------------------------------
+    Route::get('/static/imagenes/{id}', function() {
+        return File::get(public_path() . '/var/www/html/AMdigital_MercadoBodegas/');
+    });
 });
 //consultas espaciales en laravel
 //como hace laravel para servir imagenes estaticas
