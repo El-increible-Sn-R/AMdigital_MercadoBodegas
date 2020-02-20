@@ -232,10 +232,7 @@ class ReservasController extends Controller
         return $reservaParaActualizar;
     }
 
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id){}
     
     public function BorradoLogico($id){
         //$LoQueIngresoElUsuario=$id->get('id');
@@ -282,9 +279,12 @@ class ReservasController extends Controller
             //array_push($listaParaRetornar ,$MensajeParaRetornar);
             return response()->json($loQueSeDv);
         }
-        foreach (Reserva::all()->where('reserva_estaBorrado','n') as $reserva) {
-        
+        foreach (Reserva::all()->where('reserva_estaBorrado','n') as $reserva) { 
             if($reserva->reserva_email==$POST_email && $reserva->reserva_codigo==$POST_codigo){
+                $fechaDeHoyConMilisegundos = microtime(true); 
+                //$NUEVO_token=md5($POST_email.$fechaDeHoyConMilisegundos);   
+                $reserva->reserva_token_edition=md5($POST_email.$fechaDeHoyConMilisegundos);
+                $reserva->save();
                 $items=array(
                     'mensaje' => 'login correcto',
                     'token' => $reserva->reserva_token_edition);
@@ -312,11 +312,11 @@ class ReservasController extends Controller
         $content = json_decode($request->getContent(),true);    
         $POST_nombre=null;
         $POST_apellido=null;
-        $POST_email=null;
+        // $POST_email=null;
         $POST_telefono=null;
         $POST_fechaMudanza=null;
         $POST_token=null;
-        $POST_codigo=null;
+        // $POST_codigo=null;
         foreach (array_keys($content) as $key) {
             if($key=='reserva_nombre'){
                 $POST_nombre=$content['reserva_nombre'];
@@ -324,9 +324,9 @@ class ReservasController extends Controller
             if($key=='reserva_apellido'){
                 $POST_apellido=$content['reserva_apellido'];
             }
-            if($key=='login_correo'){
-                $POST_email=$content['login_correo'];
-            }
+            // if($key=='login_correo'){
+            //     $POST_email=$content['login_correo'];
+            // }
             if($key=='reserva_telefono'){
                 $POST_telefono=$content['reserva_telefono'];
             }
@@ -336,25 +336,25 @@ class ReservasController extends Controller
             if($key=='reserva_token_edition'){
                 $POST_token=$content['reserva_token_edition'];
             }
-            if($key=='login_codigo'){
-                $POST_codigo=$content['login_codigo'];
-            }
+            // if($key=='login_codigo'){
+            //     $POST_codigo=$content['login_codigo'];
+            // }
         }
         if(is_null($POST_token)){
             $MensajeParaRetornar=array('mensaje' => 'no has ingresado un token');
             array_push($ListaParaRetornar ,$MensajeParaRetornar);
             $seColocaronLosDatosMinimosRequeridos=false;
         }
-        if(is_null($POST_codigo)){
-            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un codigo');
-            array_push($ListaParaRetornar ,$MensajeParaRetornar);
-            $seColocaronLosDatosMinimosRequeridos=false;
-        }
-        if(is_null($POST_email)){
-            $MensajeParaRetornar=array('mensaje' => 'no has ingresado un email');
-            array_push($ListaParaRetornar ,$MensajeParaRetornar);
-            $seColocaronLosDatosMinimosRequeridos=false;
-        }
+        // if(is_null($POST_codigo)){
+        //     $MensajeParaRetornar=array('mensaje' => 'no has ingresado un codigo');
+        //     array_push($ListaParaRetornar ,$MensajeParaRetornar);
+        //     $seColocaronLosDatosMinimosRequeridos=false;
+        // }
+        // if(is_null($POST_email)){
+        //     $MensajeParaRetornar=array('mensaje' => 'no has ingresado un email');
+        //     array_push($ListaParaRetornar ,$MensajeParaRetornar);
+        //     $seColocaronLosDatosMinimosRequeridos=false;
+        // }
         if($seColocaronLosDatosMinimosRequeridos==false){
             $loQueSeDv['status']='ERROR';
             $loQueSeDv['items']=$ListaParaRetornar;
@@ -362,8 +362,8 @@ class ReservasController extends Controller
             return response()->json($loQueSeDv);
         }
         foreach (Reserva::all()->where('reserva_estaBorrado','n') as $reserva) {
-            if($reserva->reserva_email == $POST_email && 
-            $reserva->reserva_codigo == $POST_codigo && 
+            if(//$reserva->reserva_email == $POST_email && 
+            // $reserva->reserva_codigo == $POST_codigo && 
             $reserva->reserva_token_edition == $POST_token){
                 $hoydia=date("Y-m-d");
                 if(is_null($POST_nombre)==false){
@@ -397,9 +397,10 @@ class ReservasController extends Controller
                 $loQueSeDv['items']=$items;
                 return response()->json($loQueSeDv);
             }
+            //$elForNoEncontroAlgoConEseToken=true;
         }
         $items=array(
-            'mensaje' => 'no se realizo ninguna actuazilacion');
+            'mensaje' => 'token incorrecto, no se encontro una reserva con ese token');
         $loQueSeDv['status']='ERROR';
         $loQueSeDv['items']=$items;
         return response()->json($loQueSeDv);
