@@ -52,7 +52,7 @@ Route::group(['middleware'=>'cors'],function(){
 
     //--------------------------------------------IMAGENES---------------------------------------
     Route::get('/static/imagenes', function() {
-        return File::get(public_path().'/var/www/html/AMdigital_MercadoBodegas/static/imagenes');
+        return File::get(public_path().'/var/www/html/AMdigital_MercadoBodegas/static/imagenes/1a.jpg');
     });
 });
 //consultas espaciales en laravel
