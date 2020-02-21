@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'enLaCarpetaPublic' => [
+            'driver' => 'local',
+            'root'   => public_path(),
+        ],
+
     ],
 
 ];
