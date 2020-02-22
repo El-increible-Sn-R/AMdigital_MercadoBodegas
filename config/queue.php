@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Queue Connection Name
@@ -12,9 +11,7 @@ return [
     | syntax for every one. Here you may define a default connection.
     |
     */
-
     'default' => env('QUEUE_DRIVER', 'sync'),
-
     /*
     |--------------------------------------------------------------------------
     | Queue Connections
