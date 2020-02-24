@@ -138,9 +138,26 @@ class UnidadController extends Controller
         $unidadParaActualizar->update($request->all());
         return $unidadParaActualizar;
     }
-    //Eliminar el recurso especificado del almacenamiento.
+    //Eliminar el recurso especificado del almacenamiento logicamente.
     public function destroy($id)
     {
-        //
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
+        $unidadParaBorrar = Unidad::find($id);      
+        if($unidadParaBorrar != null){
+            $unidadParaBorrar->unidad_estaBorrado='s';
+            $unidadParaBorrar->unidad_estaDisponible='n';
+            $unidadParaBorrar->save();
+            $loQueSeDv['status']='OK';
+            $loQueSeDv['items']=$unidadParaBorrar;
+            return response()->json($loQueSeDv);
+        }else{
+            $loQueSeDv['status']='ERROR';
+            $ListaParaRetornar=array(
+                'mensaje' => "no existe una unidad con ese ID");
+            $loQueSeDv['items']=$ListaParaRetornar;
+            return response()->json($loQueSeDv);
+        }
+        return $unidadParaBorrar;
     }
 }

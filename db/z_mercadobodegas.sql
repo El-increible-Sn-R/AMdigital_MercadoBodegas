@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 15-02-2020 a las 20:30:06
+-- Tiempo de generación: 24-02-2020 a las 18:45:19
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -25,6 +25,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+CREATE TABLE IF NOT EXISTS `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`(250))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `migrations`
 --
 
@@ -34,26 +53,27 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(66, '2020_01_10_005332_create_usuarios_table', 1),
-(67, '2020_01_10_005416_create_empresas_table', 1),
-(68, '2020_01_10_005448_create_locales_table', 1),
-(69, '2020_01_10_005530_create_galerias_table', 1),
-(70, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
-(71, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
-(72, '2020_01_10_005854_create_localcaracteristicas_table', 1),
-(73, '2020_01_10_005938_create_unidades_table', 1),
-(74, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
-(75, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
-(76, '2020_01_10_010313_create_reservas_table', 1),
-(77, '2020_01_10_010400_create_visitas_table', 1),
-(78, '2020_01_10_010417_create_horario_table', 1);
+(80, '2020_01_10_005332_create_usuarios_table', 1),
+(81, '2020_01_10_005416_create_empresas_table', 1),
+(82, '2020_01_10_005448_create_locales_table', 1),
+(83, '2020_01_10_005530_create_galerias_table', 1),
+(84, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
+(85, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
+(86, '2020_01_10_005854_create_localcaracteristicas_table', 1),
+(87, '2020_01_10_005938_create_unidades_table', 1),
+(88, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
+(89, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
+(90, '2020_01_10_010313_create_reservas_table', 1),
+(91, '2020_01_10_010400_create_visitas_table', 1),
+(92, '2020_01_10_010417_create_horario_table', 1),
+(93, '2020_02_21_184633_create_jobs_table', 1);
 
 -- --------------------------------------------------------
 
@@ -159,7 +179,23 @@ CREATE TABLE IF NOT EXISTS `t_galeria` (
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`galeria_id`),
   KEY `t_galeria_local_id_foreign` (`local_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `t_galeria`
+--
+
+INSERT INTO `t_galeria` (`galeria_id`, `galeria_coleccion_orden`, `local_id`) VALUES
+(1, 'http://amdigital.tech/static/imagenes/1j.jpeg', 1),
+(2, 'http://amdigital.tech/static/imagenes/1a.jpg', 2),
+(3, 'http://amdigital.tech/static/imagenes/1b.png', 3),
+(4, 'http://amdigital.tech/static/imagenes/1f.jpg', 4),
+(5, 'http://amdigital.tech/static/imagenes/1i.jpg', 5),
+(6, 'http://amdigital.tech/static/imagenes/1g.jpg', 6),
+(7, 'http://amdigital.tech/static/imagenes/1c.jpg', 7),
+(8, 'http://amdigital.tech/static/imagenes/1d.jpg', 8),
+(9, 'http://amdigital.tech/static/imagenes/1e.jpg', 9),
+(10, 'http://amdigital.tech/static/imagenes/1h.jpg', 10);
 
 -- --------------------------------------------------------
 
@@ -551,8 +587,8 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
   `reserva_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_telefono` bigint(20) NOT NULL,
-  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-15 20:12:08',
-  `reserva_fechaMudanza` date DEFAULT '2020-02-15',
+  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-24 13:15:11',
+  `reserva_fechaMudanza` date DEFAULT '2020-02-24',
   `reserva_estado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `reserva_estaBorrado` enum('s','n') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   `unidad_id` bigint(20) UNSIGNED NOT NULL,
@@ -567,11 +603,11 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
 --
 
 INSERT INTO `t_reservas` (`reserva_id`, `reserva_nombre`, `reserva_apellido`, `reserva_email`, `reserva_telefono`, `reserva_fechaRegistro`, `reserva_fechaMudanza`, `reserva_estado`, `reserva_estaBorrado`, `unidad_id`, `reserva_codigo`, `reserva_token_edition`) VALUES
-(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-15 15:27:10', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
-(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-15 20:12:08', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
-(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-15 20:12:08', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
-(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-15 20:12:08', '2020-02-15', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
-(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-15 20:12:08', '2020-02-15', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
+(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-24 13:33:19', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
+(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-24 13:15:11', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
+(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-24 13:15:11', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
+(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-24 13:15:11', '2020-02-24', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
+(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-24 13:15:11', '2020-02-24', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
 
 -- --------------------------------------------------------
 
@@ -663,8 +699,8 @@ DROP TABLE IF EXISTS `t_visitas`;
 CREATE TABLE IF NOT EXISTS `t_visitas` (
   `visitas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `visitas_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `visitas_fecha` datetime NOT NULL DEFAULT '2020-02-15 00:00:00',
-  `visitas_hora` time NOT NULL DEFAULT '20:12:10',
+  `visitas_fecha` datetime NOT NULL DEFAULT '2020-02-24 00:00:00',
+  `visitas_hora` time NOT NULL DEFAULT '13:15:13',
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`visitas_id`),
   KEY `t_visitas_local_id_foreign` (`local_id`)

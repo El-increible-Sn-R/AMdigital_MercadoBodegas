@@ -24,6 +24,7 @@ class LocalesController extends Controller
                     $value3->makeHidden(['pivot']);
                 }
             }
+            $value->Galeria;
         }
         return $TodoslosLocales;
         //[
@@ -87,16 +88,15 @@ class LocalesController extends Controller
                 $value->makeHidden(['pivot']);//ocultar el pivot
             }
         }
-        //$local->Horario;
         foreach ($local->Horario as $value) {
             $value->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
             $value->horario_horaSalida = date("H:i", strtotime($value->horario_horaEntrada));
         }
         $local->Caracteristicas;
-        //print_r($horario);
         foreach ($local->Caracteristicas as $value) {
             $value->GrupoCaracteristicas;
         }
+        $local->Galeria;
         return $local;
     }
 

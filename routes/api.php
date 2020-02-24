@@ -46,9 +46,10 @@ Route::group(['middleware'=>'cors'],function(){
         ['index','store','show']);
 
     //actualizar una unidad:http://localhost:8000/api/unidades/{id}+(json por POST) 
-    Route::post('/unidades/{id}','UnidadController@update');
+    Route::post('/unidades/modificarUnidad/{id}','UnidadController@update');
 
     //eliminar una unidad:
+    Route::get('/unidades/borrarUnidad/{id}','UnidadController@destroy');
 });
 //consultas espaciales en laravel
 //como hace laravel para servir imagenes estaticas

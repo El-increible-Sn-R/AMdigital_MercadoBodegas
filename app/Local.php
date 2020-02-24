@@ -3,7 +3,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Unidad;
 use App\Horario;
-use App\LocalCaracteristicas;///////
+use App\Galeria;
 use App\CaracteristicasDeUnLocal;
 
 class Local extends Model
@@ -32,9 +32,9 @@ class Local extends Model
         return $this->hasMany(Horario::class,'local_id');
     }
     
-//    public function Caracteristicasss(){
-//        return $this->hasMany(LocalCaracteristicas::class,'local_id');
-//    }
+    public function Galeria(){
+        return $this->hasMany(Galeria::class,'galeria_id');
+    }
     
     public function Caracteristicas(){
     //este local puede tener muchas caracteriticas
