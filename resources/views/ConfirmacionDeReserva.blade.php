@@ -67,7 +67,6 @@
 													    <p>Telefono de contacto:<b>{{$datosNecesarios->datosDelLocal->local_telefono}}</b></p>
 													    <p>correo de contacto:<b>{{$datosNecesarios->datosDelLocal->local_email}}</b></p>
 													    <p>direccion:<b>{{$datosNecesarios->datosDelLocal->local_direccion}}</b></p>
-													    <p>ventana de reserva:<b>{{$datosNecesarios->datosDelLocal->local_nDiasDeReserva}}</b></p>
 													</div>
                                                 </td>
                                             </tr>

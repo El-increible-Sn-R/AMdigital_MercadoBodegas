@@ -116,27 +116,39 @@ class UnidadController extends Controller
     //Actualizar el recurso especificado en el almacenamiento
     public function update(Request $request, $id)
     {
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
         $unidadParaActualizar = Unidad::find($id);
-        $contenidosDelRequest = json_decode($request->getContent(),true);
-        $POST_caracteristicas = null;
-        foreach (array_keys($contenidosDelRequest) as $key) {
-            if($key=='caracteristicas'){
-                $unidadParaActualizar->Caracteristicas()->detach();
-                $POST_caracteristicas=$contenidosDelRequest['caracteristicas'];
-                $totalDeCambios=count($POST_caracteristicas) ;
-                $contador=0;
-                //return $POST_caracteristicas;
-                while ( $totalDeCambios > 0) {
-                    $unidadParaActualizar->Caracteristicas()
-                        ->attach($POST_caracteristicas[$contador]); 
-                    $contador++;  
-                    $totalDeCambios--;
+        if($unidadParaActualizar != null){
+            $contenidosDelRequest = json_decode($request->getContent(),true);
+            $POST_caracteristicas = null;
+            foreach (array_keys($contenidosDelRequest) as $key) {
+                if($key=='caracteristicas'){
+                    $unidadParaActualizar->Caracteristicas()->detach();
+                    $POST_caracteristicas=$contenidosDelRequest['caracteristicas'];
+                    $totalDeCambios=count($POST_caracteristicas) ;
+                    $contador=0;
+                    //return $POST_caracteristicas;
+                    while ( $totalDeCambios > 0) {
+                        $unidadParaActualizar->Caracteristicas()
+                            ->attach($POST_caracteristicas[$contador]); 
+                        $contador++;  
+                        $totalDeCambios--;
+                    }
                 }
-            }
-        }   
-        //return $POST_caracteristicas;
-        $unidadParaActualizar->update($request->all());
-        return $unidadParaActualizar;
+            } 
+            $unidadParaActualizar->update($request->all());
+            $loQueSeDv['status']='OK';
+            $loQueSeDv['items']=$unidadParaActualizar;
+            return response()->json($loQueSeDv);  
+        }else{
+            $loQueSeDv['status']='ERROR';
+            $ListaParaRetornar=array(
+                'mensaje' => "no existe una unidad con ese ID");
+            $loQueSeDv['items']=$ListaParaRetornar;
+            return response()->json($loQueSeDv);
+        }
+        echo 'saliste del control';
     }
     //Eliminar el recurso especificado del almacenamiento logicamente.
     public function destroy($id)
@@ -158,6 +170,6 @@ class UnidadController extends Controller
             $loQueSeDv['items']=$ListaParaRetornar;
             return response()->json($loQueSeDv);
         }
-        return $unidadParaBorrar;
+        echo 'saliste del control';
     }
 }

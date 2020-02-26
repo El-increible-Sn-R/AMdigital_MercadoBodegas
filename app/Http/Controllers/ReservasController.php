@@ -18,17 +18,29 @@ class ReservasController extends Controller
     }
 
     public function buscarReservaPorCodigo($codigo){
-        $reserva = Reserva::where('reserva_codigo',$codigo)->get()->first();
+        $loQueSeDv = array();
+        $reserva = Reserva::where('reserva_codigo',$codigo)->get()->first();//->where('reserva_estaBorrado','n')
         if(is_null($reserva)){
-            $MensajeParaRetornar=array(
-                 'status' => 'ERROR',
-                 'mensaje' => 'ingresaste un codigo de una reserva que no existe');
-            return response()->json($MensajeParaRetornar);
+            $loQueSeDv['status']='ERROR';
+            $ListaParaRetornar=array(
+                'mensaje' => 'ingresaste un codigo de una reserva que no existe');
+            $loQueSeDv['items']=$ListaParaRetornar; 
+            return $loQueSeDv;  
         }else{
-            $reserva->Unidad;
-            $reserva->Unidad->Local;
-            $reserva->Unidad->Local->horario;
-            return $reserva;
+            if($reserva->reserva_estaBorrado=='s')  {
+                $loQueSeDv['status']='ERROR';
+                $ListaParaRetornar=array(
+                    'mensaje' => 'ingresaste un codigo de una reserva que no fue eliminada');
+                $loQueSeDv['items']=$ListaParaRetornar; 
+                return $loQueSeDv;    
+            }else{
+                $reserva->Unidad;
+                $reserva->Unidad->Local;
+                $reserva->Unidad->Local->horario;
+                $loQueSeDv['status']='OK';
+                $loQueSeDv['cuerpo']=$reserva;                 
+                return $loQueSeDv;
+            }
         }
     }
 
@@ -309,6 +321,10 @@ class ReservasController extends Controller
         $ListaParaRetornar = array();
         $seColocaronLosDatosMinimosRequeridos=true;
         $seColocaronDatosDeActualizacion=true;
+
+        //return  var_dump($request->getContent());
+        return $request->getContent();
+
         $content = json_decode($request->getContent(),true);    
         $POST_nombre=null;
         $POST_apellido=null;
