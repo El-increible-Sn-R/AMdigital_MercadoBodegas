@@ -33,7 +33,7 @@ class Local extends Model
     }
     
     public function Galeria(){
-        return $this->hasMany(Galeria::class,'galeria_id');
+        return $this->hasMany(Galeria::class,'local_id');
     }
     
     public function Caracteristicas(){
