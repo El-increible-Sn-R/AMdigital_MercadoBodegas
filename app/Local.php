@@ -18,9 +18,12 @@ class Local extends Model
         'local_email',
         'local_pais',
         'local_region',
+        'local_provincia',
         'local_comuna',
         'local_direccion',
         'usuario_id',
+        'local_latitud',
+        'local_longitud',
         'local_nDiasDeReserva'];
     
     public function Unidad(){

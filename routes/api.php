@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 Route::group(['middleware'=>'cors'],function(){
     //-----------------------------------------LOCALES----------------------------------------------
     //dv un local por id:http://localhost:8000/api/locales/{1}
-    //dv todos los locales:http://localhost:8000/api/locales
-    Route::resource('/locales','LocalesController');
+    //dv todos los locales:http://localhost:8000/api/locales     
+    Route::resource('/locales','LocalesController')->only(['index','show','store']);
 
     //dv resutados de una busqueda:http://localhost:8000/api/ruta/?ubicacion=peru
     Route::get('/ruta', 'LocalesController@ObtenerLocal');
+
+    //dv locales mientras navegas:http: //localhost:8000/api/locales/busquedaPosicion/-16.0/-71.0/0.51
+    Route::get('/locales/busquedaPosicion/{latitud}/{longitud}/{maximo}','LocalesController@buscarMientrasNavegas');
 
     //-------------------------------------------RESERVAS-------------------------------------------
     //dv todas las reservas:http://localhost:8000/api/reservas
@@ -48,7 +51,7 @@ Route::group(['middleware'=>'cors'],function(){
     //actualizar una unidad:http://localhost:8000/api/unidades/{id}+(json por POST) 
     Route::post('/unidades/modificarUnidad/{id}','UnidadController@update');
 
-    //eliminar una unidad:
+    //eliminar una unidad: http://localhost:8000/api/unidades/borrarUnidad/28
     Route::get('/unidades/borrarUnidad/{id}','UnidadController@destroy');
 });
 //consultas espaciales en laravel

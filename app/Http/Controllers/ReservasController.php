@@ -322,9 +322,6 @@ class ReservasController extends Controller
         $seColocaronLosDatosMinimosRequeridos=true;
         $seColocaronDatosDeActualizacion=true;
 
-        //return  var_dump($request->getContent());
-        return $request->getContent();
-
         $content = json_decode($request->getContent(),true);    
         $POST_nombre=null;
         $POST_apellido=null;

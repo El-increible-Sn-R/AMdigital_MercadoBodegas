@@ -30,7 +30,6 @@ class UnidadController extends Controller
         $POST_estaBorrado=null;
         $POST_estaDisponible=null;
         $POST_caracteristicas=null;
-        $cantidadDeCaracteristicas=0;
         foreach (array_keys($content) as $key) {
             if($key=='unidad_precioMensual'){
                 $POST_precioMensual=$content['unidad_precioMensual'];
@@ -93,13 +92,15 @@ class UnidadController extends Controller
              'local_id' => $POST_local_id,
              'unidad_estaBorrado' => $POST_estaBorrado,
              'unidad_estaDisponible' => $POST_estaDisponible]);
-        $cantidadDeCaracteristicas=count($POST_caracteristicas);
-        $contador=0;
-        while ( $cantidadDeCaracteristicas > 0) {
-            $UnidadCreada->Caracteristicas()->attach(
-                ['caracteristicasUnidad_id'=>$POST_caracteristicas[$contador]]);  
-                $contador++;  
-                $cantidadDeCaracteristicas--;
+        if(is_null($POST_caracteristicas)==false){
+            $cantidadDeCaracteristicas=count($POST_caracteristicas);
+            $contador=0;
+            while ( $cantidadDeCaracteristicas > 0) {
+                $UnidadCreada->Caracteristicas()->attach(
+                    ['caracteristicasUnidad_id'=>$POST_caracteristicas[$contador]]);  
+                    $contador++;  
+                    $cantidadDeCaracteristicas--;
+            }
         }
         return $UnidadCreada;
         //return $POST_caracteristicas;
