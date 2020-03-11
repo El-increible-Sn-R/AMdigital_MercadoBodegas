@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 26-02-2020 a las 00:58:52
+-- Tiempo de generación: 11-03-2020 a las 15:11:08
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -53,27 +53,27 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(94, '2020_01_10_005332_create_usuarios_table', 1),
-(95, '2020_01_10_005416_create_empresas_table', 1),
-(96, '2020_01_10_005448_create_locales_table', 1),
-(97, '2020_01_10_005530_create_galerias_table', 1),
-(98, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
-(99, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
-(100, '2020_01_10_005854_create_localcaracteristicas_table', 1),
-(101, '2020_01_10_005938_create_unidades_table', 1),
-(102, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
-(103, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
-(104, '2020_01_10_010313_create_reservas_table', 1),
-(105, '2020_01_10_010400_create_visitas_table', 1),
-(106, '2020_01_10_010417_create_horario_table', 1),
-(107, '2020_02_21_184633_create_jobs_table', 1);
+(164, '2020_01_10_005332_create_usuarios_table', 1),
+(165, '2020_01_10_005416_create_empresas_table', 1),
+(166, '2020_01_10_005448_create_locales_table', 1),
+(167, '2020_01_10_005530_create_galerias_table', 1),
+(168, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
+(169, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
+(170, '2020_01_10_005854_create_localcaracteristicas_table', 1),
+(171, '2020_01_10_005938_create_unidades_table', 1),
+(172, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
+(173, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
+(174, '2020_01_10_010313_create_reservas_table', 1),
+(175, '2020_01_10_010400_create_visitas_table', 1),
+(176, '2020_01_10_010417_create_horario_table', 1),
+(177, '2020_02_21_184633_create_jobs_table', 1);
 
 -- --------------------------------------------------------
 
@@ -152,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `t_empresas` (
   `empresa_estaBorrado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   `empresa_pais` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `empresa_region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `empresa_provincia` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `empresa_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `usuario_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`empresa_id`),
@@ -162,9 +163,10 @@ CREATE TABLE IF NOT EXISTS `t_empresas` (
 -- Volcado de datos para la tabla `t_empresas`
 --
 
-INSERT INTO `t_empresas` (`empresa_id`, `empresa_nombre`, `empresa_estaBorrado`, `empresa_pais`, `empresa_region`, `empresa_comuna`, `usuario_id`) VALUES
-(1, 'Super bodegas', 'n', 'Perú', 'Arequipa', 'Arequipa', 1),
-(2, 'Bodegas Santiago', 'n', 'Chile', 'Santiago', 'La Granja', 1);
+INSERT INTO `t_empresas` (`empresa_id`, `empresa_nombre`, `empresa_estaBorrado`, `empresa_pais`, `empresa_region`, `empresa_provincia`, `empresa_comuna`, `usuario_id`) VALUES
+(1, 'Super bodegas', 'n', 'Perú', 'Arequipa', 'Arequipa', 'miraflores', 1),
+(2, 'Bodegas Santiago', 'n', 'Chile', 'Santiago', 'Santiago', 'La Granja', 1),
+(3, 'empresa de prueba, actualisando', 's', 'Peruu', 'Limua', 'Luima', 'Breñua', 1);
 
 -- --------------------------------------------------------
 
@@ -600,8 +602,8 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
   `reserva_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_telefono` bigint(20) NOT NULL,
-  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-02-25 19:28:56',
-  `reserva_fechaMudanza` date DEFAULT '2020-02-25',
+  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-03-05 18:16:50',
+  `reserva_fechaMudanza` date DEFAULT '2020-03-05',
   `reserva_estado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `reserva_estaBorrado` enum('s','n') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   `unidad_id` bigint(20) UNSIGNED NOT NULL,
@@ -616,11 +618,11 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
 --
 
 INSERT INTO `t_reservas` (`reserva_id`, `reserva_nombre`, `reserva_apellido`, `reserva_email`, `reserva_telefono`, `reserva_fechaRegistro`, `reserva_fechaMudanza`, `reserva_estado`, `reserva_estaBorrado`, `unidad_id`, `reserva_codigo`, `reserva_token_edition`) VALUES
-(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-02-25 19:58:34', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
-(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-02-25 19:28:56', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
-(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-02-25 19:28:56', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
-(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-02-25 19:28:56', '2020-02-25', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
-(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-02-25 19:28:56', '2020-02-25', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
+(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-03-05 18:25:24', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
+(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-03-05 18:16:50', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
+(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-03-05 18:16:50', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
+(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-03-05 18:16:50', '2020-03-05', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
+(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-03-05 18:16:50', '2020-03-05', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
 
 -- --------------------------------------------------------
 
@@ -712,8 +714,8 @@ DROP TABLE IF EXISTS `t_visitas`;
 CREATE TABLE IF NOT EXISTS `t_visitas` (
   `visitas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `visitas_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `visitas_fecha` datetime NOT NULL DEFAULT '2020-02-25 00:00:00',
-  `visitas_hora` time NOT NULL DEFAULT '19:28:59',
+  `visitas_fecha` datetime NOT NULL DEFAULT '2020-03-05 00:00:00',
+  `visitas_hora` time NOT NULL DEFAULT '18:16:52',
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`visitas_id`),
   KEY `t_visitas_local_id_foreign` (`local_id`)
