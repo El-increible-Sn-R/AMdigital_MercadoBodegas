@@ -31,7 +31,7 @@ class CreateLocalesTable extends Migration
             $table->foreign('empresa_id')->references('empresa_id')->on('t_empresas');
             $table->foreign('usuario_id')->references('usuario_id')->on('t_usuarios');
         });
-        DB::statement("ALTER TABLE t_locales ADD CONSTRAINT chk_estaBorrado check (local_estaBorrado in ('b','n'));");
+        DB::statement("ALTER TABLE t_locales ADD CONSTRAINT chk_estaBorrado check (local_estaBorrado in ('s','n'));");
     }
 
     public function down()

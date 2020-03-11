@@ -138,8 +138,10 @@ class UnidadController extends Controller
                     }
                 }
             } 
-            $unidadParaActualizar->update($request->all());
+            //$unidadParaActualizar->update($request->all());
+            $unidadParaActualizar->update($contenidosDelRequest);
             $loQueSeDv['status']='OK';
+            $loQueSeDv['items']=$ListaParaRetornar;
             $loQueSeDv['items']=$unidadParaActualizar;
             return response()->json($loQueSeDv);  
         }else{

@@ -24,7 +24,8 @@ class Local extends Model
         'usuario_id',
         'local_latitud',
         'local_longitud',
-        'local_nDiasDeReserva'];
+        'local_nDiasDeReserva',
+        'local_estaBorrado'];
     
     public function Unidad(){
         //Este_local->tieneMuchas(UNidades--nombreDelCampofk(deLaTablaUnidad)--nombreDelCampoPKdelLocal)

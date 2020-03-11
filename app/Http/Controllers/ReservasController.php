@@ -30,7 +30,7 @@ class ReservasController extends Controller
             if($reserva->reserva_estaBorrado=='s')  {
                 $loQueSeDv['status']='ERROR';
                 $ListaParaRetornar=array(
-                    'mensaje' => 'ingresaste un codigo de una reserva que no fue eliminada');
+                    'mensaje' => 'ingresaste un codigo de una reserva que fue eliminada');
                 $loQueSeDv['items']=$ListaParaRetornar; 
                 return $loQueSeDv;    
             }else{

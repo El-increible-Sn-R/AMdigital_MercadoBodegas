@@ -4,9 +4,10 @@ use Illuminate\Http\Request;
 use App\Local;
 use App\Empresa;
 use App\User;
-
+use App\CaracteristicasDeUnLocal;
 use App\Horario;
-use Illuminate\Support\Facades\Schema;
+use App\Unidad;
+//use Illuminate\Support\Facades\Schema;
 
 class LocalesController extends Controller
 {
@@ -108,6 +109,45 @@ class LocalesController extends Controller
             }
             if($key=='local_horario'){
                 $POST_horarios=$content['local_horario'];
+                $c=0;
+                $total=count($POST_horarios);
+                if($total>0){
+                    while ($total > 0) {
+                        if(count($POST_horarios[$c])>0){
+                            if (count($POST_horarios[$c]) > 4) {
+                                $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] tiene mas de 4 elementos");
+                                array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;
+                            }
+                            if (strtotime($POST_horarios[$c][0])==false){
+                                $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] no tiene el formato H:i para la hora de entrada");
+                                array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;      
+                            }
+                            if (strtotime($POST_horarios[$c][1])==false) {
+                                $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] no tiene el formato H:i para la hora de salida");
+                                array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;      
+                            }
+                            if ($POST_horarios[$c][2] <> "a" && $POST_horarios[$c][2] <> "o") {
+                                $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] no esta usando las clave permitidas <o> o <a>");
+                                array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;      
+                            }
+                            ///////////////////////////LUNES
+                        }else{
+                            $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] esta vacio");
+                            array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                            $seColocaronLosDatosMinimosRequeridos=false;
+                        }    
+                        $c++;
+                        $total--;
+                    }
+                }else{
+                    $MensajeParaRetornar=array('mensaje' => "el array local_horario esta vacio");
+                    array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
+                    $seColocaronLosDatosMinimosRequeridos=false;
+                }
             }
         } 
         if(is_null($POST_nombre)){
@@ -207,6 +247,10 @@ class LocalesController extends Controller
             //array_push($listaParaRetornar ,$MensajeParaRetornar);
             return response()->json($listaParaRetornar);
         } 
+        // $nuevoHorario=date("H:i",strtotime($POST_horarios[0][0]));
+        // $nuevoHorario2=date("H:i",strtotime($POST_horarios[0][1]));
+        // $nuevo=$nuevoHorario." - - ".$nuevoHorario2;
+        // return $nuevo;
         $LocalCreado=local::create(  
             ['local_nombre' => $POST_nombre , 
              'local_descripcion' => $POST_descripcion, 
@@ -236,19 +280,19 @@ class LocalesController extends Controller
             $todosLosHorarios = count($POST_horarios);
             $contador=0;
             while ( $todosLosHorarios > 0) {
-                $todosLosDatosDeUnHorario = count($POST_horarios[$contador]);
+                //$todosLosDatosDeUnHorario = count($POST_horarios[$contador]);
                 //$contadorDos=0;
-                while ( $todosLosDatosDeUnHorario > 0 ) {
+                //while ( $todosLosDatosDeUnHorario > 0 ) {
                     //$columns = Schema::getColumnListing('t_horario');//tmb dv el id
-                    $nuevoHorario = new Horario;
-                    $nuevoHorario->horario_horaEntrada=$POST_horarios[$contador][0];
-                    $nuevoHorario->horario_horaSalida=$POST_horarios[$contador][1];
-                    $nuevoHorario->horario_tipo=$POST_horarios[$contador][2];
-                    $nuevoHorario->horario_dia=$POST_horarios[$contador][3];
-                    $LocalCreado->Horario()->save($nuevoHorario);
+                $nuevoHorario = new Horario;
+                $nuevoHorario->horario_horaEntrada=date("H:i",strtotime($POST_horarios[$contador][0]));
+                $nuevoHorario->horario_horaSalida=date("H:i",strtotime($POST_horarios[$contador][1]));
+                $nuevoHorario->horario_tipo=$POST_horarios[$contador][2];
+                $nuevoHorario->horario_dia=$POST_horarios[$contador][3];
+                $LocalCreado->Horario()->save($nuevoHorario);
                     //$contadorDos++;  
-                    $todosLosDatosDeUnHorario--;
-                }             
+                    //$todosLosDatosDeUnHorario--;
+                //}             
                 $contador++;  
                 $todosLosHorarios--;
             }
@@ -267,12 +311,12 @@ class LocalesController extends Controller
     {
         $local=Local::find($local_id);
         if(is_null($local)){
-            $MensajeParaRetornar=array(
-                'status' => 'ERROR',
-                'mensaje' => 'ingresaste un id de local que no existe');
-            return response()->json($MensajeParaRetornar);
+            $MensajeParaRetornar['status']='ERROR';
+            $ListaParaRetornar=array(
+                    'mensaje' => 'ingresaste un id que no existe');
+            $MensajeParaRetornar['items']=$ListaParaRetornar; 
+            return $MensajeParaRetornar;
         }
-
         // $evitarExeso = Local::find($local_id);
         // $Exeso = Local::find($local_id);
         // $TodaLaInfoDelLocalPeroBonito = array();
@@ -301,38 +345,157 @@ class LocalesController extends Controller
 
         //$unidadesDeLosLocales=$local->Unidad;
         //$local->Unidad;
-        foreach ($local->Unidad as $value) {
-            //$value->Caracteristicas;
-            //$value->makeHidden(['Caracteristicas']);
-            foreach ($value->Caracteristicas as $value) {
-                $value->makeHidden(['pivot']);//ocultar el pivot
+        else{
+            if ($local->local_estaBorrado=='s') {
+                $MensajeParaRetornar['status']='ERROR';
+                $ListaParaRetornar=array(
+                    'mensaje' => 'ingresaste un codigo de un local que fue eliminado');
+                $MensajeParaRetornar['items']=$ListaParaRetornar; 
+                return $MensajeParaRetornar;                                          
+            }else{
+                foreach ($local->Unidad as $value) {
+                    //$value->Caracteristicas;
+                    //$value->makeHidden(['Caracteristicas']);
+                    foreach ($value->Caracteristicas as $value) {
+                        $value->makeHidden(['pivot']);//ocultar el pivot
+                    }
+                }
+                foreach ($local->Horario as $value) {
+                    $value->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
+                    $value->horario_horaSalida = date("H:i", strtotime($value->horario_horaSalida));
+                }
+                $local->Caracteristicas;
+                foreach ($local->Caracteristicas as $value) {
+                    $value->GrupoCaracteristicas;
+                }
+                $local->Galeria;
+                return $local;
             }
         }
-        foreach ($local->Horario as $value) {
-            $value->horario_horaEntrada = date("H:i", strtotime($value->horario_horaEntrada));
-            $value->horario_horaSalida = date("H:i", strtotime($value->horario_horaEntrada));
-        }
-        $local->Caracteristicas;
-        foreach ($local->Caracteristicas as $value) {
-            $value->GrupoCaracteristicas;
-        }
-        $local->Galeria;
-        return $local;
-    }
-
-    public function edit($id)
-    {
-        //
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $seColocaronLosDatosMinimosRequeridos=true;
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
+        $localParaActualizar = Local::find($id);
+        if($localParaActualizar != null){
+            $contenidosDelRequest = json_decode($request->getContent(),true);
+            $POST_caracteristicas = null;
+            foreach (array_keys($contenidosDelRequest) as $key) {
+                if($key=='local_caracteristicas'){
+                    $localParaActualizar->Caracteristicas()->detach();
+                    //borrar las caracteristicas actuales de este local (desatachar) 
+                    $POST_caracteristicas=$contenidosDelRequest['local_caracteristicas'];
+                    $totalDeCambios=count($POST_caracteristicas);
+                    $contador=0;
+                    //return $POST_caracteristicas;
+                    while ( $totalDeCambios > 0) {
+                        $SupuestaCaracteristica=CaracteristicasDeUnLocal::find($POST_caracteristicas[$contador]);
+                        if($SupuestaCaracteristica==null){
+                            $MensajeParaRetornar=array('advertencia' => "se ignoro el id $POST_caracteristicas[$contador] porque no existe en la base de datos");
+                            array_push($ListaParaRetornar ,$MensajeParaRetornar);                            
+                        }else{
+                            $localParaActualizar->Caracteristicas()
+                                ->attach($POST_caracteristicas[$contador]); 
+                        }
+                        $contador++;  
+                        $totalDeCambios--;
+                    }
+                }
+                if($key=='empresa_id'){
+                    $POST_empresa=$contenidosDelRequest['empresa_id'];
+                    $SupuestaEmpresa=Empresa::find($POST_empresa);
+                    if($SupuestaEmpresa == null){
+                        $MensajeParaRetornar=array('mensaje' => 'ingresaste un id de empresa que no existe');
+                        array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                        $seColocaronLosDatosMinimosRequeridos=false;
+                    }
+                }
+                if($key=='usuario_id'){
+                    $SupuestaEmpresa=User::find($contenidosDelRequest['usuario_id']);
+                    if($SupuestaEmpresa == null){
+                        $MensajeParaRetornar=array('mensaje' => 'ingresaste un id de usuario que no existe');
+                        array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                        $seColocaronLosDatosMinimosRequeridos=false;
+                    }
+                }
+                if($key=='local_horario'){
+                    $POST_horarios=$contenidosDelRequest['local_horario'];
+                    $horariosAsociados= array();
+                    $horariosAsociados=horario::where('local_id', '=', $id)->get();
+                    $n=count($horariosAsociados->all());
+                    while ($n > 0 ) {
+                        $horariosAsociados=horario::where('local_id', '=', $id)->first();
+                        $horariosAsociados->delete();
+                        $n--;
+                    }
+                    foreach ($POST_horarios as $value) {       
+                        $nuevoHorario = new Horario;     
+                        $nuevoHorario->horario_horaEntrada=date("H:i",strtotime($value[0]));  
+                        $nuevoHorario->horario_horaSalida=date("H:i",strtotime($value[1]));  
+                        $nuevoHorario->horario_tipo=$value[2];  
+                        $nuevoHorario->horario_dia=$value[3]; 
+                        $localParaActualizar->Horario()->save($nuevoHorario);  
+                    }
+                    //$localParaActualizar->push();
+                }if ($key=='local_estaBorrado') {
+                    $POST_estaBorrado=$contenidosDelRequest['local_estaBorrado'];
+                    if ($POST_estaBorrado=='n') {
+                        Unidad::where('local_id',$id)->update(['unidad_estaBorrado' => 'n','unidad_estaDisponible'=>'s']);
+                        $MensajeParaRetornar=array('mensaje' => "todas las unidades del local fueron restauradas");
+                        array_push($ListaParaRetornar ,$MensajeParaRetornar);   
+                    }
+                }
+            } 
+            if ($seColocaronLosDatosMinimosRequeridos==false) {
+                $loQueSeDv['status']='ERROR';
+                $loQueSeDv['items']=$ListaParaRetornar;
+                return response()->json($loQueSeDv);  
+            }
+            //print_r($request->getContent());
+            //print_r($request->all());//es array
+            $localParaActualizar->update($contenidosDelRequest);
+            $loQueSeDv['status']='OK';
+            $loQueSeDv['items']=$ListaParaRetornar;
+            $loQueSeDv['cuerpo']=$localParaActualizar;
+            return response()->json($loQueSeDv);  
+        }else{
+            $loQueSeDv['status']='ERROR';
+            $ListaParaRetornar=array(
+                'mensaje' => "no existe un local con ese ID");
+            $loQueSeDv['items']=$ListaParaRetornar;
+            return response()->json($loQueSeDv);
+        }        
     }
 
     public function destroy($id)
     {
-        //
+        $loQueSeDv = array();
+        $ListaParaRetornar = array();
+        $localParaBorrar = Local::find($id);      
+        if($localParaBorrar != null){
+            Unidad::where('local_id',$id)->update(['unidad_estaBorrado' => 's','unidad_estaDisponible'=>'n']);
+            $MensajeParaRetornar=array('mensaje' => "todas las unidades del local fueron borradas logicamente");
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);   
+            //return print_r($unidadesDelLocalABorrar,true);
+            $localParaBorrar->local_estaBorrado='s';
+            $MensajeParaRetornar=array('mensaje' => "borrado logico del local completado");
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);  
+            $localParaBorrar->save();
+            $loQueSeDv['status']='OK';
+            $loQueSeDv['items']=$ListaParaRetornar;
+            $loQueSeDv['cuerpo']=$localParaBorrar;
+            return response()->json($loQueSeDv);
+        }else{
+            $loQueSeDv['status']='ERROR';
+            $ListaParaRetornar=array(
+                'mensaje' => "no existe un local con ese ID");
+            $loQueSeDv['items']=$ListaParaRetornar;
+            return response()->json($loQueSeDv);
+        }
+        echo 'saliste fuera de mis controles ¿que hiciste?';
     }
     
     public function ObtenerLocal(Request $r){
@@ -357,24 +520,24 @@ class LocalesController extends Controller
         } 
     }
 
-    public function buscarMientrasNavegas($latitud,$longitud,$maximo){
-        // $a=(-($maximo)+$latitud);
-        // $b=$maximo+$latitud;
-        // return $b;
-
-        $localesCerca=Local::where('local_longitud','>',strval(-($maximo)+$longitud))
+    public function buscarMientrasNavegas($latitud,$longitud,$sumarLatitud,$sumarLongitud){
+        $localesCerca=Local::where(
+            'local_longitud','>',strval(-($sumarLongitud)+$longitud))
             //->orWhere('local_longitud','>',strval($longitud))
-            ->Where('local_longitud','<',strval($maximo+$longitud))
+            ->Where('local_longitud','<',strval($sumarLongitud+$longitud))
             //->orWhere('local_longitud','<',strval($longitud))
-            ->Where('local_latitud','>',strval(-($maximo)+$latitud))
-            ->Where('local_latitud','<',strval($maximo+$latitud))
+            ->Where('local_latitud','>',strval(-($sumarLatitud)+$latitud))
+            ->Where('local_latitud','<',strval($sumarLatitud+$latitud))
             ->get();
-        return $localesCerca;
 
-        // if(-16.0<$latitud){
-        //     return 'lo que diste es mayor a -16.0';
-        // }else{
-        //     return 'lo que diste es menor a -16.0';
-        // }
+        foreach ($localesCerca as  $value) {
+            foreach ($value->Unidad as $value2) {
+                foreach ($value2->caracteristicas as $value3) {
+                    $value3->makeHidden(['pivot']);
+                }
+            }
+            $value->Galeria;
+        }
+        return $localesCerca;
     }
 }
