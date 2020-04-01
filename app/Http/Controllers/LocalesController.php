@@ -134,7 +134,7 @@ class LocalesController extends Controller
                                 array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);
                                 $seColocaronLosDatosMinimosRequeridos=false;      
                             }
-                            ///////////////////////////LUNES
+                            ///////////////////////////hacer que solo puedan poner:lunes,martes,miercoles,jueves,viernes,sabado,domingo
                         }else{
                             $MensajeParaRetornar=array('mensaje' => "dentro del array local_horario, el horario con indice [$c] esta vacio");
                             array_push($erroresEnListaParaRetornar ,$MensajeParaRetornar);

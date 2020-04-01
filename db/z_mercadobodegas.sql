@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 11-03-2020 a las 15:11:08
+-- Tiempo de generación: 01-04-2020 a las 06:47:59
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -53,27 +53,124 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(164, '2020_01_10_005332_create_usuarios_table', 1),
-(165, '2020_01_10_005416_create_empresas_table', 1),
-(166, '2020_01_10_005448_create_locales_table', 1),
-(167, '2020_01_10_005530_create_galerias_table', 1),
-(168, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
-(169, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
-(170, '2020_01_10_005854_create_localcaracteristicas_table', 1),
-(171, '2020_01_10_005938_create_unidades_table', 1),
-(172, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
-(173, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
-(174, '2020_01_10_010313_create_reservas_table', 1),
-(175, '2020_01_10_010400_create_visitas_table', 1),
-(176, '2020_01_10_010417_create_horario_table', 1),
-(177, '2020_02_21_184633_create_jobs_table', 1);
+(41, '2016_06_01_000001_create_oauth_auth_codes_table', 1),
+(42, '2016_06_01_000002_create_oauth_access_tokens_table', 1),
+(43, '2016_06_01_000003_create_oauth_refresh_tokens_table', 1),
+(44, '2016_06_01_000004_create_oauth_clients_table', 1),
+(45, '2016_06_01_000005_create_oauth_personal_access_clients_table', 1),
+(46, '2020_01_10_005332_create_usuarios_table', 1),
+(47, '2020_01_10_005416_create_empresas_table', 1),
+(48, '2020_01_10_005448_create_locales_table', 1),
+(49, '2020_01_10_005530_create_galerias_table', 1),
+(50, '2020_01_10_005648_create_grupocaracteriticas_table', 1),
+(51, '2020_01_10_005742_create_caracteriticaslocal_table', 1),
+(52, '2020_01_10_005854_create_localcaracteristicas_table', 1),
+(53, '2020_01_10_005938_create_unidades_table', 1),
+(54, '2020_01_10_010043_create_caracteristicasunidad_table', 1),
+(55, '2020_01_10_010221_create_unidadcaracteristicas_table', 1),
+(56, '2020_01_10_010313_create_reservas_table', 1),
+(57, '2020_01_10_010400_create_visitas_table', 1),
+(58, '2020_01_10_010417_create_horario_table', 1),
+(59, '2020_02_21_184633_create_jobs_table', 1),
+(60, '2020_03_12_203121_pivot_administracion', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oauth_access_tokens`
+--
+
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_access_tokens_user_id_index` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oauth_auth_codes`
+--
+
+DROP TABLE IF EXISTS `oauth_auth_codes`;
+CREATE TABLE IF NOT EXISTS `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_auth_codes_user_id_index` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oauth_clients`
+--
+
+DROP TABLE IF EXISTS `oauth_clients`;
+CREATE TABLE IF NOT EXISTS `oauth_clients` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_clients_user_id_index` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oauth_personal_access_clients`
+--
+
+DROP TABLE IF EXISTS `oauth_personal_access_clients`;
+CREATE TABLE IF NOT EXISTS `oauth_personal_access_clients` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oauth_refresh_tokens`
+--
+
+DROP TABLE IF EXISTS `oauth_refresh_tokens`;
+CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -154,19 +251,16 @@ CREATE TABLE IF NOT EXISTS `t_empresas` (
   `empresa_region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `empresa_provincia` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `empresa_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `usuario_id` bigint(20) UNSIGNED NOT NULL,
-  PRIMARY KEY (`empresa_id`),
-  KEY `t_empresas_usuario_id_foreign` (`usuario_id`)
+  PRIMARY KEY (`empresa_id`)
 ) ;
 
 --
 -- Volcado de datos para la tabla `t_empresas`
 --
 
-INSERT INTO `t_empresas` (`empresa_id`, `empresa_nombre`, `empresa_estaBorrado`, `empresa_pais`, `empresa_region`, `empresa_provincia`, `empresa_comuna`, `usuario_id`) VALUES
-(1, 'Super bodegas', 'n', 'Perú', 'Arequipa', 'Arequipa', 'miraflores', 1),
-(2, 'Bodegas Santiago', 'n', 'Chile', 'Santiago', 'Santiago', 'La Granja', 1),
-(3, 'empresa de prueba, actualisando', 's', 'Peruu', 'Limua', 'Luima', 'Breñua', 1);
+INSERT INTO `t_empresas` (`empresa_id`, `empresa_nombre`, `empresa_estaBorrado`, `empresa_pais`, `empresa_region`, `empresa_provincia`, `empresa_comuna`) VALUES
+(1, 'Super bodegas', 'n', 'Perú', 'Arequipa', 'Arequipa', 'miraflores'),
+(2, 'Bodegas Santiago', 'n', 'Chile', 'Santiago', 'Santiago', 'La Granja');
 
 -- --------------------------------------------------------
 
@@ -385,31 +479,74 @@ CREATE TABLE IF NOT EXISTS `t_locales` (
   `local_provincia` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_comuna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_direccion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `usuario_id` bigint(20) UNSIGNED NOT NULL,
   `local_latitud` double NOT NULL,
   `local_longitud` double NOT NULL,
   `local_nDiasDeReserva` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `local_estaBorrado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   PRIMARY KEY (`local_id`),
-  KEY `t_locales_empresa_id_foreign` (`empresa_id`),
-  KEY `t_locales_usuario_id_foreign` (`usuario_id`)
+  KEY `t_locales_empresa_id_foreign` (`empresa_id`)
 ) ;
 
 --
 -- Volcado de datos para la tabla `t_locales`
 --
 
-INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_provincia`, `local_comuna`, `local_direccion`, `usuario_id`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
-(1, 'Peke Bodega', 'Peke Bodega le ofrece bodegas para guardar sus cosas por el tiempo que deseé', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Alto Selva Alegre', 'Argentina 126, Arequipa 04004, Perú', 1, -16.382547, -71.519298, '20', 'n'),
-(2, 'La casa del guardado', 'Bodegas de todo tipo de disponibles las 24 horas y a precios negociables', 2, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', 1, -36.807547, -73.066322, '20', 'n'),
-(3, 'Mudanzas EIRL', 'damos servicios de mudanza ademas de ofrecer bodegas para el guardado de todo tipo de cosas', 2, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', 1, -33.518138, -70.61986, '20', 'n'),
-(4, 'Locales la nueva', 'descripcion', 2, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', 1, -33.462733, -70.742522, '20', 'n'),
-(5, 'Despensas y Bodegas', 'descripcion', 2, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', 1, -18.470816, -70.296328, '20', 'n'),
-(6, 'Local Flor Andina', 'local de bodegas en Paucarpata muy serca del mall aventura plaza con unidades de todo tipo y 30 dias de ventana de reserva', 1, 666666666, 'LocalPaucarpata@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Paucarpata', 'John F. Kennedy 1201-803, Arequipa 04002', 1, -16.41925, -71.509139, '30', 'n'),
-(7, 'locales Cercado', 'local en el Cercado de Arequipa por las proximidades del centro historico le ofrece unidades de variados tamaños y 20 dias de ventana de reserva', 1, 777777777, 'emailDelLocalCercado@gmail.com', 'Perú', 'Arequipa', 'Arequipa', 'Cercado', 'Centro Histórico, Arequipa 04001', 1, -16.400233, -71.537364, '20', 'n'),
-(8, 'local La Pastoreña', 'local en el distrito de miraflores cerca al cementerio municipal, con unidades de un metraje menor a 10 metros cuadrados no ofrece una ventana de reserva', 1, 888888888, 'localMiraflorino@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Miraflores', 'Miraflores 04004', 1, -16.374467, -71.495023, '0', 'n'),
-(9, 'el Caymeño', 'local ubicado al frente del estadio Bolognesi le ofrece unidades de 5 metros cuadrados a mas y sin una ventana de reserva', 1, 999999999, 'localDeCayma@algo.com', 'Perú', 'Arequipa', 'Arequipa', 'Cayma', 'Calle Aviación 1018, Arequipa 04018', 1, -16.345504, -71.542861, '0', 'n'),
-(10, 'El Hogareño', 'este local le ofrece solo un tipo especifico de unidades y no ofrece ventana de reserva', 1, 101010101, 'JoseLuisBustamanteyRibero@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'José Luis Bustamante y Ribero', 'Auxiliar Av. Dolores, Arequipa 04009', 1, -16.426415, -71.52449, '0', 'n');
+INSERT INTO `t_locales` (`local_id`, `local_nombre`, `local_descripcion`, `empresa_id`, `local_telefono`, `local_email`, `local_pais`, `local_region`, `local_provincia`, `local_comuna`, `local_direccion`, `local_latitud`, `local_longitud`, `local_nDiasDeReserva`, `local_estaBorrado`) VALUES
+(1, 'Peke Bodega', 'Peke Bodega le ofrece bodegas para guardar sus cosas por el tiempo que deseé', 1, 111111111, 'emailDelLocal@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Alto Selva Alegre', 'Argentina 126, Arequipa 04004, Perú', -16.382547, -71.519298, '20', 'n'),
+(2, 'La casa del guardado', 'Bodegas de todo tipo de disponibles las 24 horas y a precios negociables', 2, 222222222, 'emailDelLocalDos@algo.algo', 'Chile', 'Bío Bío', 'Concepción', 'Concepción', 'Diego de Almagro 640-672, Concepción, Bío Bío, Chile', -36.807547, -73.066322, '20', 'n'),
+(3, 'Mudanzas EIRL', 'damos servicios de mudanza ademas de ofrecer bodegas para el guardado de todo tipo de cosas', 2, 333333333, 'emailDePrueb@algo.algo', 'Chile', 'Santiago', 'Santiago', 'La Granja', 'Veintiocho Ote 6465-6499, La Granja, Región Metropolitana, Chile', -33.518138, -70.61986, '20', 'n'),
+(4, 'Locales la nueva', 'descripcion', 2, 444444444, 'esteEmailNoExiste@local4.com', 'Chile', 'Santiago', 'Santiago', 'Pudahuel', 'Dillu 267-291, Pudahuel, Región Metropolitana, Chile', -33.462733, -70.742522, '20', 'n'),
+(5, 'Despensas y Bodegas', 'descripcion', 2, 555555555, 'local__5@algo.algo', 'Chile', 'Arica y Parinacota', 'Arica', 'Arica', 'Alejandro Azolas 2364, Arica, Arica y Parinacota, Chile', -18.470816, -70.296328, '20', 'n'),
+(6, 'Local Flor Andina', 'local de bodegas en Paucarpata muy serca del mall aventura plaza con unidades de todo tipo y 30 dias de ventana de reserva', 1, 666666666, 'LocalPaucarpata@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Paucarpata', 'John F. Kennedy 1201-803, Arequipa 04002', -16.41925, -71.509139, '30', 'n'),
+(7, 'locales Cercado', 'local en el Cercado de Arequipa por las proximidades del centro historico le ofrece unidades de variados tamaños y 20 dias de ventana de reserva', 1, 777777777, 'emailDelLocalCercado@gmail.com', 'Perú', 'Arequipa', 'Arequipa', 'Cercado', 'Centro Histórico, Arequipa 04001', -16.400233, -71.537364, '20', 'n'),
+(8, 'local La Pastoreña', 'local en el distrito de miraflores cerca al cementerio municipal, con unidades de un metraje menor a 10 metros cuadrados no ofrece una ventana de reserva', 1, 888888888, 'localMiraflorino@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'Miraflores', 'Miraflores 04004', -16.374467, -71.495023, '0', 'n'),
+(9, 'el Caymeño', 'local ubicado al frente del estadio Bolognesi le ofrece unidades de 5 metros cuadrados a mas y sin una ventana de reserva', 1, 999999999, 'localDeCayma@algo.com', 'Perú', 'Arequipa', 'Arequipa', 'Cayma', 'Calle Aviación 1018, Arequipa 04018', -16.345504, -71.542861, '0', 'n'),
+(10, 'El Hogareño', 'este local le ofrece solo un tipo especifico de unidades y no ofrece ventana de reserva', 1, 101010101, 'JoseLuisBustamanteyRibero@algo.algo', 'Perú', 'Arequipa', 'Arequipa', 'José Luis Bustamante y Ribero', 'Auxiliar Av. Dolores, Arequipa 04009', -16.426415, -71.52449, '0', 'n');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `t_pivot_administracion`
+--
+
+DROP TABLE IF EXISTS `t_pivot_administracion`;
+CREATE TABLE IF NOT EXISTS `t_pivot_administracion` (
+  `administracion_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint(20) UNSIGNED NOT NULL,
+  `empresa_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `local_id` bigint(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`administracion_id`),
+  KEY `t_pivot_administracion_empresa_id_foreign` (`empresa_id`),
+  KEY `t_pivot_administracion_usuario_id_foreign` (`usuario_id`),
+  KEY `t_pivot_administracion_local_id_foreign` (`local_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `t_pivot_administracion`
+--
+
+INSERT INTO `t_pivot_administracion` (`administracion_id`, `usuario_id`, `empresa_id`, `local_id`) VALUES
+(1, 1, 1, 1),
+(2, 1, 1, 6),
+(3, 1, 1, 7),
+(4, 1, 1, 8),
+(5, 1, 1, 9),
+(6, 1, 1, 10),
+(7, 1, 2, 2),
+(8, 1, 2, 3),
+(9, 1, 2, 4),
+(10, 1, 2, 5),
+(11, 2, 1, 1),
+(12, 2, 1, 6),
+(13, 2, 1, 7),
+(14, 2, 1, 8),
+(15, 2, 1, 9),
+(16, 2, 1, 10),
+(17, 3, NULL, 1),
+(18, 3, NULL, 6),
+(19, 4, NULL, 7),
+(20, 1, NULL, 8),
+(21, 1, NULL, 9);
 
 -- --------------------------------------------------------
 
@@ -602,8 +739,8 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
   `reserva_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reserva_telefono` bigint(20) NOT NULL,
-  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-03-05 18:16:50',
-  `reserva_fechaMudanza` date DEFAULT '2020-03-05',
+  `reserva_fechaRegistro` datetime NOT NULL DEFAULT '2020-04-01 01:44:16',
+  `reserva_fechaMudanza` date DEFAULT '2020-04-01',
   `reserva_estado` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `reserva_estaBorrado` enum('s','n') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   `unidad_id` bigint(20) UNSIGNED NOT NULL,
@@ -618,11 +755,11 @@ CREATE TABLE IF NOT EXISTS `t_reservas` (
 --
 
 INSERT INTO `t_reservas` (`reserva_id`, `reserva_nombre`, `reserva_apellido`, `reserva_email`, `reserva_telefono`, `reserva_fechaRegistro`, `reserva_fechaMudanza`, `reserva_estado`, `reserva_estaBorrado`, `unidad_id`, `reserva_codigo`, `reserva_token_edition`) VALUES
-(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-03-05 18:25:24', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
-(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-03-05 18:16:50', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
-(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-03-05 18:16:50', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
-(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-03-05 18:16:50', '2020-03-05', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
-(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-03-05 18:16:50', '2020-03-05', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
+(1, 'Niko', 'Bellic', 'nikoBellic@gmail.com', 11111111, '2020-04-01 01:46:11', '2020-02-06', 'o', 'n', 2, 'Q2OOLS5Z', '281bd29a44e3da06e769ad79694a53f1'),
+(2, 'tomy', 'vercetty', 'to_ver@gmail.com', 222222222, '2020-04-01 01:44:16', '2020-01-30', 'o', 'n', 3, '081IUTYK', '43f383da2df0a0e3f042b5c5bca00f9b'),
+(3, 'carl', 'jhonson', 'cj_master@hotmail.com', 333333333, '2020-04-01 01:44:16', '2020-02-07', 'o', 'n', 2, 'UIB2I7S8', '0aa5354a13b49920cca9b31474eacf63'),
+(4, 'marco', 'arriaga', 'marco.arriaga@outlook.com', 444444444, '2020-04-01 01:44:16', '2020-04-01', 'o', 's', 1, '1LP0D3ZG', '4597730ad8d39ff104f6460ed59cc1b1'),
+(5, 'marcos', 'aguilar', 'ma.agui.esteban@isur.edu.pe', 555555555, '2020-04-01 01:44:16', '2020-04-01', 'o', 's', 4, 'T188VFB7', 'e6a505e0cfd9376725af6dcde4f85317');
 
 -- --------------------------------------------------------
 
@@ -702,7 +839,11 @@ CREATE TABLE IF NOT EXISTS `t_usuarios` (
 --
 
 INSERT INTO `t_usuarios` (`usuario_id`, `usuario_nombre`, `usuario_apellido`, `usuario_telefono`, `usuario_login`, `usuario_contrasenia`, `usuario_imagen`, `usuario_tipo`) VALUES
-(1, 'karol', 'Goptila', 945678345, 'karolGoptila', 'contrasenia', NULL, 's');
+(1, 'marcos', 'aguilar', 111111111, 'marcos', 'contrasenia', NULL, 's'),
+(2, 'cristian', 'arotaype', 222222222, 'cristian', 'contrasenia', NULL, 'a'),
+(3, 'rodrigo', 'lupaca', 333333333, 'rodrigo', 'contrasenia', NULL, 'e'),
+(4, 'andres', 'mollo', 444444444, 'andres', 'contrasenia', NULL, 'e'),
+(5, 'damian', 'tollo', 555555555, 'damian', 'contrasenia', NULL, 'a');
 
 -- --------------------------------------------------------
 
@@ -714,8 +855,8 @@ DROP TABLE IF EXISTS `t_visitas`;
 CREATE TABLE IF NOT EXISTS `t_visitas` (
   `visitas_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `visitas_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `visitas_fecha` datetime NOT NULL DEFAULT '2020-03-05 00:00:00',
-  `visitas_hora` time NOT NULL DEFAULT '18:16:52',
+  `visitas_fecha` datetime NOT NULL DEFAULT '2020-04-01 00:00:00',
+  `visitas_hora` time NOT NULL DEFAULT '01:44:21',
   `local_id` bigint(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`visitas_id`),
   KEY `t_visitas_local_id_foreign` (`local_id`)
@@ -730,12 +871,6 @@ CREATE TABLE IF NOT EXISTS `t_visitas` (
 --
 ALTER TABLE `t_caracteriticas_de_locales`
   ADD CONSTRAINT `t_caracteriticas_de_locales_grupo_id_foreign` FOREIGN KEY (`grupo_id`) REFERENCES `t_grupo_de_caracteristicas` (`grupo_id`);
-
---
--- Filtros para la tabla `t_empresas`
---
-ALTER TABLE `t_empresas`
-  ADD CONSTRAINT `t_empresas_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `t_usuarios` (`usuario_id`);
 
 --
 -- Filtros para la tabla `t_galeria`
@@ -753,8 +888,15 @@ ALTER TABLE `t_horario`
 -- Filtros para la tabla `t_locales`
 --
 ALTER TABLE `t_locales`
-  ADD CONSTRAINT `t_locales_empresa_id_foreign` FOREIGN KEY (`empresa_id`) REFERENCES `t_empresas` (`empresa_id`),
-  ADD CONSTRAINT `t_locales_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `t_usuarios` (`usuario_id`);
+  ADD CONSTRAINT `t_locales_empresa_id_foreign` FOREIGN KEY (`empresa_id`) REFERENCES `t_empresas` (`empresa_id`);
+
+--
+-- Filtros para la tabla `t_pivot_administracion`
+--
+ALTER TABLE `t_pivot_administracion`
+  ADD CONSTRAINT `t_pivot_administracion_empresa_id_foreign` FOREIGN KEY (`empresa_id`) REFERENCES `t_empresas` (`empresa_id`),
+  ADD CONSTRAINT `t_pivot_administracion_local_id_foreign` FOREIGN KEY (`local_id`) REFERENCES `t_locales` (`local_id`),
+  ADD CONSTRAINT `t_pivot_administracion_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `t_usuarios` (`usuario_id`);
 
 --
 -- Filtros para la tabla `t_pivot_caracteriticas_unidad`

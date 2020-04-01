@@ -149,6 +149,7 @@ return [
          * Package Service Providers...
          */
         'Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider', 
+        Laravel\Passport\PassportServiceProvider::class,
         /*
          * Application Service Providers...
          */

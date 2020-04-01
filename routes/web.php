@@ -41,7 +41,8 @@ Route::get('/static/imagenes/{archivo}', function($archivo) {
 	// $public_path = public_path();//////////////
  	//$url = $public_path.'/borrame/1a.jpg';//////MAL
 	// return Storage::response($url); ///////////
-	return Storage::disk('enLaCarpetaPublic')->response('/borrame/'.$archivo); ///BIEN
+	//return Storage::disk('enLaCarpetaPublic')->response('/borrame/'.$archivo); ///BIEN
+    return Storage::disk('enLaCarpetaPublic')->response($archivo); ///BIEN para local
 });
 
 //Route::get('verGaleria','StorageController@index');

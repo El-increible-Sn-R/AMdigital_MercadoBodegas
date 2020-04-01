@@ -2,6 +2,7 @@
 namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Local;
+use App\User;
 
 class Empresa extends Model
 {
@@ -13,10 +14,14 @@ class Empresa extends Model
         'empresa_region',
         'empresa_provincia',
         'empresa_comuna',
-        'usuario_id',
         'empresa_estaBorrado'];
 
     public function Local(){
         return $this->hasMany(Local::class,'empresa_id','empresa_id');
     }
+
+    public function UsuariosAdministradores(){
+        return $this->belongsToMany(User::class,'t_pivot_administracion','empresa_id','usuario_id');
+    }
 }
+    

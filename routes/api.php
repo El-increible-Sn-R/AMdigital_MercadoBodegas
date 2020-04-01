@@ -10,6 +10,19 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 Route::group(['middleware'=>'cors'],function(){
+
+    //---------------------------------------USUARIOS---------------------------------------------
+    //registrarte:
+    Route::post('signup','authController@signup'); 
+    //logearse:
+    Route::post('login','authController@login');
+    //rutas para las que necesitas estar logeado:
+    Route::group(['middleware'=>'auth:api'],function(){
+        //cerrar sesion:
+        Route::get('logout','authController@logout');
+        //dv un usuario por id:
+        Route::get('usuario','authController@show');
+    });
     //-----------------------------------------LOCALES----------------------------------------------
     //dv un local por id:http://localhost:8000/api/locales/{1}
     //insertar un local:http://localhost:8000/api/locales+(json por POST) 

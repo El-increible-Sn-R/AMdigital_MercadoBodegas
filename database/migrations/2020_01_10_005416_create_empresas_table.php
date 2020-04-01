@@ -18,9 +18,9 @@ class CreateEmpresasTable extends Migration
             $table->string('empresa_region',255);
             $table->string('empresa_provincia',255);
             $table->string('empresa_comuna',255);
-            $table->bigInteger('usuario_id')->unsigned();
+            //$table->bigInteger('usuario_id')->unsigned();
             
-            $table->foreign('usuario_id')->references('usuario_id')->on('t_usuarios');
+            //$table->foreign('usuario_id')->references('usuario_id')->on('t_usuarios');
         });
         DB::statement("ALTER TABLE t_empresas ADD CONSTRAINT chk_estaBorrado CHECK (empresa_estaBorrado in ('s','n'));");
     }

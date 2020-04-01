@@ -22,14 +22,14 @@ class CreateLocalesTable extends Migration
             $table->string('local_provincia',255);//en peru: Provincia 
             $table->string('local_comuna',255);//en peru: distritos
             $table->string('local_direccion',255);
-            $table->bigInteger('usuario_id')->unsigned();
+            //$table->bigInteger('usuario_id')->unsigned();
             $table->double('local_latitud');
             $table->double('local_longitud');
             $table->string('local_nDiasDeReserva',255);
             $table->char('local_estaBorrado',1)->default('n');
             
             $table->foreign('empresa_id')->references('empresa_id')->on('t_empresas');
-            $table->foreign('usuario_id')->references('usuario_id')->on('t_usuarios');
+            //$table->foreign('usuario_id')->references('usuario_id')->on('t_usuarios');
         });
         DB::statement("ALTER TABLE t_locales ADD CONSTRAINT chk_estaBorrado check (local_estaBorrado in ('s','n'));");
     }

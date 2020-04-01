@@ -24,24 +24,87 @@ class EmpresasController extends Controller
         $seColocaronLosDatosMinimosRequeridos=true;
         $loQueSeDv = array();
         $ListaParaRetornar = array();
+        $POST_usuario=null;
         $contenidosDelRequest = json_decode($request->getContent(),true);
         foreach (array_keys($contenidosDelRequest) as $key) {
             if($key=='usuario_id'){
+                //ahora nos dara un array para representar que puedes insertarle muchos usuarios a esta empresa 
                 $POST_usuario=$contenidosDelRequest['usuario_id'];
-                $SupuestoUsuario=User::find($POST_usuario);
-                if($SupuestoUsuario == null){
-                    $MensajeParaRetornar=array('mensaje' => 'ingresaste un id de usuario que no existe');
+                $c=0;
+                if(gettype($POST_usuario) != 'array'){
+                    $MensajeParaRetornar=array('mensaje' => 'el parametro usuario_id debe ser un array');
                     array_push($ListaParaRetornar ,$MensajeParaRetornar);
                     $seColocaronLosDatosMinimosRequeridos=false;
+                    break;    
+                }
+                $total=count($POST_usuario);
+                if($total > 0){
+                    while ($total > 0) {
+                        $SupuestoUsuario=User::find($POST_usuario[$c]);
+                        if ($SupuestoUsuario == null) {
+                            $MensajeParaRetornar=array('mensaje' => "ingresaste un id de usuario que no existe en el indice [$c] del array usuario_id");
+                            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                            $seColocaronLosDatosMinimosRequeridos=false;
+                        }else{
+                            if($SupuestoUsuario->usuario_tipo=='e'){
+                                $MensajeParaRetornar=array('mensaje' => "ingresaste un usuario de tipo empleado en el indice [$c] del array usuario_id");
+                                array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;
+                            }
+                            if($SupuestoUsuario->usuario_tipo=='s'){
+                                $MensajeParaRetornar=array('advertencia' => "no es necesario que coloques a los superEmpleados en el array usuario_id");
+                                array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                            }
+                        }                      
+                        $c++;
+                        $total--;
+                    }                       
+                }else{
+                    $MensajeParaRetornar=array('mensaje' => "el array usuario_id esta vacio");
+                    array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                    $seColocaronLosDatosMinimosRequeridos=false;                    
                 }
             }
         }
+        if(is_null($POST_usuario)){
+            $MensajeParaRetornar=array('advertencia' => 'no has ingresado un usuario que administre esta empresa');
+            array_push($ListaParaRetornar ,$MensajeParaRetornar);
+        } 
         if ($seColocaronLosDatosMinimosRequeridos==false) {
             $loQueSeDv['status']='ERROR';
             $loQueSeDv['items']=$ListaParaRetornar;
             return $loQueSeDv;  
         }
         $EmpresaCreada=Empresa::create($contenidosDelRequest);
+
+        if(is_null($POST_usuario)==false){
+
+            foreach (User::all()->where('usuario_tipo','s') as $superUsuario) {
+                $EsteSuperUsuarioEsta = false;
+                foreach ($POST_usuario as $value) {
+                    if ($value == $superUsuario->usuario_id) {
+                        $EsteSuperUsuarioEsta=true;
+                    }
+                }
+                if ($EsteSuperUsuarioEsta==false) {
+                    array_push($POST_usuario,$superUsuario->usuario_id);
+                }
+                //array_push($POST_usuario,$superUsuario->usuario_id);
+            }
+
+            $cantidadDeUsuarios=count($POST_usuario);
+            $contador=0;
+            while ( $cantidadDeUsuarios > 0) {
+                $EmpresaCreada->UsuariosAdministradores()->attach(
+                    ['usuario_id'=>$POST_usuario[$contador]
+                    //,'empresa_id'=>$EmpresaCreada->empresa_id
+                    ]);  
+                    $contador++;  
+                    $cantidadDeUsuarios--;
+            }
+        }
+        $MensajeParaRetornar=array('mensaje' => 'empresa creada con exito');
+        array_push($ListaParaRetornar ,$MensajeParaRetornar);
         $loQueSeDv = array('status' => 'OK', 
             'items' => $ListaParaRetornar,
             'cuerpo' => $EmpresaCreada);
@@ -86,35 +149,72 @@ class EmpresasController extends Controller
         $ListaParaRetornar = array();
         $EmpresaParaActualizar = Empresa::find($id);
         if($EmpresaParaActualizar != null){
+            $POST_usuario=null;
             $contenidosDelRequest = json_decode($request->getContent(),true);
             foreach (array_keys($contenidosDelRequest) as $key) {
                 if($key=='usuario_id'){
-                    $SupuestoUsuario=User::find($contenidosDelRequest['usuario_id']);
-                    if($SupuestoUsuario == null){
-                        $MensajeParaRetornar=array('mensaje' => 'ingresaste un id de usuario que no existe');
+                    //ahora nos dara un array para representar que puedes insertarle muchos usuarios a esta empresa 
+                    $POST_usuario=$contenidosDelRequest['usuario_id'];
+                    $c=0;
+                    if(gettype($POST_usuario) != 'array'){
+                        $MensajeParaRetornar=array('mensaje' => 'el parametro usuario_id debe ser un array');
                         array_push($ListaParaRetornar ,$MensajeParaRetornar);
                         $seColocaronLosDatosMinimosRequeridos=false;
-                        break;
+                        continue;    
+                    }
+                    $total=count($POST_usuario);
+                    if($total > 0){
+                        while ($total > 0) {
+                            $SupuestoUsuario=User::find($POST_usuario[$c]);
+                            if ($SupuestoUsuario == null) {
+                                $MensajeParaRetornar=array('mensaje' => "ingresaste un id de usuario que no existe en el indice [$c] del array usuario_id");
+                                array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                                $seColocaronLosDatosMinimosRequeridos=false;
+                            }else{
+                                if($SupuestoUsuario->usuario_tipo=='e'){
+                                    $MensajeParaRetornar=array('mensaje' => "ingresaste un usuario de tipo empleado en el indice [$c] del array usuario_id");
+                                    array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                                    $seColocaronLosDatosMinimosRequeridos=false;
+                                }
+                                if($SupuestoUsuario->usuario_tipo=='s'){
+                                    $MensajeParaRetornar=array('advertencia' => "no es necesario que coloques a los superEmpleados en el array usuario_id");
+                                    array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                                }
+                            }                      
+                            $c++;
+                            $total--;
+                        }                       
+                    }else{
+                        $MensajeParaRetornar=array('mensaje' => "el array usuario_id esta vacio");
+                        array_push($ListaParaRetornar ,$MensajeParaRetornar);
+                        $seColocaronLosDatosMinimosRequeridos=false;                    
                     }
                 }
                 if ($key=='empresa_estaBorrado') {
                     $POST_estaBorrado=$contenidosDelRequest['empresa_estaBorrado'];
-                    if ($POST_estaBorrado=='n') {
-                        Local::where('empresa_id',$id)->update(['local_estaBorrado' => 'n']);
-                        $MensajeParaRetornar=array('mensaje' => "todos los locales de la empresa fueron restaurados");
-                        array_push($ListaParaRetornar ,$MensajeParaRetornar);  
 
-                        $LocalesDeLaEmpresaAborrar=Local::where('empresa_id',$id)->get();
-                        foreach ($LocalesDeLaEmpresaAborrar as $value) {
-                            Unidad::where('local_id',$value->local_id)->update(['unidad_estaBorrado' => 'n','unidad_estaDisponible'=>'s']);
+                    if ($POST_estaBorrado=='n' || $POST_estaBorrado=='s') {
+                         if ($POST_estaBorrado=='n') {
+                            Local::where('empresa_id',$id)->update(['local_estaBorrado' => 'n']);
+                            $MensajeParaRetornar=array('mensaje' => "todos los locales de la empresa fueron restaurados");
+                            array_push($ListaParaRetornar ,$MensajeParaRetornar);  
+
+                            $LocalesDeLaEmpresaAborrar=Local::where('empresa_id',$id)->get();
+                            foreach ($LocalesDeLaEmpresaAborrar as $value) {
+                                Unidad::where('local_id',$value->local_id)->update(['unidad_estaBorrado' => 'n','unidad_estaDisponible'=>'s']);
+                            }
+                            $MensajeParaRetornar=array('mensaje' => "todas las unidades de los locales de esta empresa fueron cambiadas a disponibles y restauradas exitosamente");
+                            array_push($ListaParaRetornar ,$MensajeParaRetornar);   
+
+                        }else{
+                            $MensajeParaRetornar=array('mensaje' => 'si quiere borrar toda la empresa use la ruta propia para el borrado logico');
+                            array_push($ListaParaRetornar ,$MensajeParaRetornar); 
+                            $seColocaronLosDatosMinimosRequeridos=false; 
                         }
-                        $MensajeParaRetornar=array('mensaje' => "todas las unidades de los locales de esta empresa fueron cambiadas a disponibles y restauradas exitosamente");
-                        array_push($ListaParaRetornar ,$MensajeParaRetornar);   
-
                     }else{
-                        $MensajeParaRetornar=array('mensaje' => 'si quiere borra toda la empresa use la ruta propia para el borrado logico');
+                        $MensajeParaRetornar=array('mensaje' => 'solo se permiten los valores <s> o <n>');
                         array_push($ListaParaRetornar ,$MensajeParaRetornar); 
-                        $seColocaronLosDatosMinimosRequeridos=false; 
+                        $seColocaronLosDatosMinimosRequeridos=false;
                     }
                 }
             } 
@@ -127,6 +227,34 @@ class EmpresasController extends Controller
             $loQueSeDv['status']='OK';
             $loQueSeDv['items']=$ListaParaRetornar;
             $loQueSeDv['cuerpo']=$EmpresaParaActualizar;
+
+            //////////////
+            if(is_null($POST_usuario)==false){
+                foreach (User::all()->where('usuario_tipo','s') as $superUsuario) {
+                    $EsteSuperUsuarioEsta = false;
+                    foreach ($POST_usuario as $value) {
+                        if ($value == $superUsuario->usuario_id) {
+                            $EsteSuperUsuarioEsta=true;
+                        }
+                    }
+                    if ($EsteSuperUsuarioEsta==false) {
+                        array_push($POST_usuario,$superUsuario->usuario_id);
+                    }
+                    //array_push($POST_usuario,$superUsuario->usuario_id);
+                }
+                $EmpresaParaActualizar->UsuariosAdministradores()->detach();
+                $cantidadDeUsuarios=count($POST_usuario);
+                $contador=0;
+                while ( $cantidadDeUsuarios > 0) {
+                    $EmpresaParaActualizar->UsuariosAdministradores()->attach(
+                        ['usuario_id'=>$POST_usuario[$contador]
+                        //,'empresa_id'=>$EmpresaCreada->empresa_id
+                        ]);  
+                        $contador++;  
+                        $cantidadDeUsuarios--;
+                }
+            }////////////////////
+
             return $loQueSeDv;  
         }else{
             $loQueSeDv['status']='ERROR';
